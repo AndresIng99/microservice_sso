@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: sso_postgres
+    environment:
+      POSTGRES_DB: sso_db
+      POSTGRES_USER: sso_user
+      POSTGRES_PASSWORD: sso_password123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - sso_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sso_user -d sso_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Redis for caching (optional but good for performance)
+  redis:
+    image: redis:7-alpine
+    container_name: sso_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - sso_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # Main SSO Application
+  sso-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: sso_application
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=sso_db
+      - DB_USER=sso_user
+      - DB_PASSWORD=sso_password123
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=sso_ultra_secret_key_2024_production
+      - JWT_EXPIRES_IN=24h
+      - ADMIN_EMAIL=admin@sso.com
+      - ADMIN_PASSWORD=admin123
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - sso_network
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # pgAdmin for database management (optional, for development)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: sso_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@sso.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - sso_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  sso_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
