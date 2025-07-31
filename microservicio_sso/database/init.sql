@@ -389,8 +389,8 @@ VALUES ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-1111111
 
 -- 6. INSERTAR ALGUNOS SERVICIOS DE EJEMPLO
 INSERT INTO registered_services (id, name, display_name, description, base_url, health_check_url, version) VALUES
-('service1-1111-1111-1111-111111111111', 'sso-admin', 'Panel de Administración SSO', 'Interfaz de administración del sistema SSO', 'http://localhost:3000', 'http://localhost:3000/health', '1.0.0'),
-('service2-2222-2222-2222-222222222222', 'example-api', 'API de Ejemplo', 'API de ejemplo para demostrar integración', 'http://example-service:3001', 'http://example-service:3001/health', '1.0.0');
+('11111111-1111-1111-1111-111111111111', 'sso-admin', 'Panel de Administración SSO', 'Interfaz de administración del sistema SSO', 'http://localhost:3000', 'http://localhost:3000/health', '1.0.0'),
+('22222222-2222-2222-2222-222222222222', 'example-api', 'API de Ejemplo', 'API de ejemplo para demostrar integración', 'http://example-service:3001', 'http://example-service:3001/health', '1.0.0');
 
 -- 7. INSERTAR RUTAS DE EJEMPLO PARA EL SSO ADMIN
 INSERT INTO service_routes (service_id, method, path, description, is_public, requires_auth) VALUES
@@ -402,7 +402,7 @@ INSERT INTO service_routes (service_id, method, path, description, is_public, re
 ((SELECT id FROM registered_services WHERE name = 'sso-admin'), 'GET', '/admin/services', 'Gestión de servicios', false, true);
 
 -- MENSAJE FINAL
-DO $
+DO $$
 DECLARE
     user_count INTEGER;
     role_count INTEGER;
@@ -434,4 +434,4 @@ BEGIN
     RAISE NOTICE '';
     RAISE NOTICE '✅ READY FOR MICROSERVICES INTEGRATION';
     RAISE NOTICE '========================================';
-END $;
+END $$;
