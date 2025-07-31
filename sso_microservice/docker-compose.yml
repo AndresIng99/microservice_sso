@@ -1,0 +1,125 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  sso-db:
+    image: postgres:15-alpine
+    container_name: sso-database
+    environment:
+      POSTGRES_DB: sso_system
+      POSTGRES_USER: sso_admin
+      POSTGRES_PASSWORD: SSOSecure2024!
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - sso_db_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - sso-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sso_admin -d sso_system"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Cache Redis
+  sso-redis:
+    image: redis:7-alpine
+    container_name: sso-cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - sso_redis_data:/data
+    networks:
+      - sso-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Aplicación SSO Principal
+  sso-app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: sso-system
+    ports:
+      - "3000:3000"
+    environment:
+      # Base de datos
+      DB_HOST: sso-db
+      DB_PORT: 5432
+      DB_NAME: sso_system
+      DB_USER: sso_admin
+      DB_PASSWORD: SSOSecure2024!
+      
+      # Redis
+      REDIS_HOST: sso-redis
+      REDIS_PORT: 6379
+      
+      # JWT Configuración
+      JWT_SECRET: SSO_JWT_ULTRA_SECRET_KEY_2024_SECURE
+      JWT_REFRESH_SECRET: SSO_REFRESH_ULTRA_SECRET_KEY_2024_SECURE
+      JWT_EXPIRES_IN: 1h
+      JWT_REFRESH_EXPIRES_IN: 7d
+      
+      # Configuración del sistema
+      NODE_ENV: production
+      PORT: 3001
+      
+      # Usuario administrador inicial
+      ADMIN_EMAIL: admin@sso.com
+      ADMIN_PASSWORD: admin123
+      ADMIN_NAME: Administrador
+      ADMIN_LASTNAME: Sistema
+      
+      # Configuración de la aplicación
+      APP_NAME: Sistema SSO
+      APP_URL: http://localhost:3000
+      
+      # Configuración de seguridad
+      BCRYPT_ROUNDS: 12
+      MAX_LOGIN_ATTEMPTS: 5
+      LOCKOUT_TIME: 15
+      
+    depends_on:
+      sso-db:
+        condition: service_healthy
+      sso-redis:
+        condition: service_healthy
+    networks:
+      - sso-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Adminer para administración de BD (opcional, solo desarrollo)
+  adminer:
+    image: adminer:latest
+    container_name: sso-adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - sso-network
+    restart: unless-stopped
+    profiles:
+      - dev
+
+networks:
+  sso-network:
+    driver: bridge
+    name: sso-network
+
+volumes:
+  sso_db_data:
+    name: sso_database_data
+  sso_redis_data:
+    name: sso_redis_data

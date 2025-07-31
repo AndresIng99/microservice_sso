@@ -1,0 +1,78 @@
+{
+  "name": "sso-microservice",
+  "version": "1.0.0",
+  "description": "Sistema SSO centralizado para microservicios con panel de administración completo",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "jest",
+    "lint": "eslint src/",
+    "build": "docker build -t sso-microservice .",
+    "compose:up": "docker-compose up -d",
+    "compose:down": "docker-compose down",
+    "compose:logs": "docker-compose logs -f sso-app",
+    "db:seed": "node src/utils.js seed",
+    "db:migrate": "node src/utils.js migrate"
+  },
+  "keywords": [
+    "sso",
+    "authentication",
+    "microservices",
+    "jwt",
+    "rbac",
+    "authorization",
+    "admin-panel"
+  ],
+  "author": "Sistema SSO",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "express-slow-down": "^1.6.0",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5",
+    "compression": "^1.7.4",
+    "morgan": "^1.10.0",
+    "pg": "^8.11.3",
+    "pg-pool": "^3.6.1",
+    "redis": "^4.6.10",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "joi": "^17.11.0",
+    "uuid": "^9.0.1",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1",
+    "moment": "^2.29.4",
+    "lodash": "^4.17.21",
+    "axios": "^1.6.2",
+    "node-cron": "^3.0.3",
+    "multer": "^1.4.5-lts.1",
+    "express-validator": "^7.0.1",
+    "cookie-parser": "^1.4.6",
+    "express-session": "^1.17.3",
+    "connect-redis": "^7.1.0",
+    "sanitize-html": "^2.11.0",
+    "express-mongo-sanitize": "^2.2.0",
+    "hpp": "^0.2.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "eslint": "^8.54.0",
+    "prettier": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/empresa/sso-microservice.git"
+  },
+  "bugs": {
+    "url": "https://github.com/empresa/sso-microservice/issues"
+  },
+  "homepage": "https://github.com/empresa/sso-microservice#readme"
+}

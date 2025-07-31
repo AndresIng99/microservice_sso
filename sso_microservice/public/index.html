@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema SSO - Autenticación Centralizada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --primary-light: #60a5fa;
+            --secondary: #6b7280;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        /* ESTILOS DE LOGIN */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 1rem;
+        }
+
+        .login-card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .login-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            opacity: 0.9;
+            font-size: 0.875rem;
+        }
+
+        .login-form {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--gray-700);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--white);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input.error {
+            border-color: var(--error);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background-color: var(--gray-400);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .alert-error {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-success {
+            background-color: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ESTILOS DEL DASHBOARD */
+        .dashboard-container {
+            display: none;
+            min-height: 100vh;
+            background-color: var(--gray-50);
+        }
+
+        .dashboard-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 280px;
+            background-color: var(--white);
+            border-right: 1px solid var(--gray-200);
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .sidebar-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-subtitle {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: var(--gray-700);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background-color: var(--gray-50);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background-color: #dbeafe;
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .nav-item span {
+            margin-right: 0.75rem;
+            font-size: 1.125rem;
+        }
+
+        .dashboard-main {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: var(--gray-900);
+            font-size: 0.875rem;
+        }
+
+        .user-email {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        .btn-logout {
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+            padding: 0.5rem;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-logout:hover {
+            background-color: var(--error);
+            color: var(--white);
+        }
+
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        /* STATS CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-title {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+        }
+
+        .stat-icon.users { background-color: #dbeafe; color: var(--primary); }
+        .stat-icon.roles { background-color: #f3e8ff; color: #8b5cf6; }
+        .stat-icon.services { background-color: #d1fae5; color: var(--success); }
+        .stat-icon.uptime { background-color: #fef3c7; color: var(--warning); }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-change {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* TABLAS */
+        .table-container {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.875rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-200);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .table th {
+            background-color: var(--gray-50);
+            font-weight: 600;
+            color: var(--gray-900);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .table td {
+            color: var(--gray-700);
+            font-size: 0.875rem;
+        }
+
+        .table tbody tr:hover {
+            background-color: var(--gray-50);
+        }
+
+        /* BADGES */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-info {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* MODALES */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-400);
+            cursor: pointer;
+            padding: 0;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background-color: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        /* ALERTAS Y NOTIFICACIONES */
+        .alerts-container {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
+        }
+
+        .alerts-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .alerts-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .alert-item:last-child {
+            border-bottom: none;
+        }
+
+        .alert-icon {
+            font-size: 1.25rem;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-message {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-time {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* PERMISOS MATRIX */
+        .permissions-matrix {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+
+        .matrix-header {
+            background-color: var(--gray-50);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .matrix-title {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(5, 1fr);
+            gap: 0;
+        }
+
+        .matrix-cell {
+            padding: 0.75rem;
+            border-right: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .matrix-cell.header {
+            background-color: var(--gray-50);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-700);
+        }
+
+        .matrix-cell.resource {
+            background-color: var(--gray-50);
+            justify-content: flex-start;
+            font-weight: 500;
+            color: var(--gray-900);
+        }
+
+        .permission-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid var(--gray-300);
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .permission-checkbox:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* UTILIDADES */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mt-4 { margin-top: 1rem; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .dashboard-sidebar {
+                transform: translateX(-100%);
+                transition: var(--transition);
+            }
+
+            .dashboard-sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .dashboard-main {
+                margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .modal {
+                margin: 1rem;
+                width: calc(100% - 2rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SECCIÓN DE LOGIN -->
+    <div id="loginSection" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>🔐 Sistema SSO</h1>
+                <p>Autenticación Centralizada</p>
+            </div>
+            <div class="login-form">
+                <div id="loginAlert" class="alert alert-error hidden"></div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" class="form-input" placeholder="admin@sso.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" id="rememberMe">
+                            <span class="form-label" style="margin: 0;">Recordar sesión</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="loginBtn">
+                        <span id="loginBtnText">Iniciar Sesión</span>
+                        <div id="loginBtnLoading" class="loading hidden"></div>
+                    </button>
+                </form>
+                
+                <div class="text-center mt-4">
+                    <p style="font-size: 0.75rem; color: var(--gray-500);">
+                        💡 Credenciales por defecto:<br>
+                        <strong>admin@sso.com</strong> / <strong>admin123</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN DEL DASHBOARD -->
+    <div id="dashboardSection" class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="dashboard-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Sistema SSO</div>
+                <div class="sidebar-subtitle">Panel de Administración</div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <span>📊</span> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-section="users">
+                    <span>👥</span> Usuarios
+                </a>
+                <a href="#" class="nav-item" data-section="roles">
+                    <span>🎭</span> Roles
+                </a>
+                <a href="#" class="nav-item" data-section="services">
+                    <span>🔧</span> Microservicios
+                </a>
+                <a href="#" class="nav-item" data-section="monitoring">
+                    <span>📈</span> Monitoreo
+                </a>
+                <a href="#" class="nav-item" data-section="audit">
+                    <span>📋</span> Auditoría
+                </a>
+                <a href="#" class="nav-item" data-section="settings">
+                    <span>⚙️</span> Configuración
+                </a>
+            </nav>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="dashboard-main">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <h1 class="header-title" id="pageTitle">Dashboard</h1>
+                <div class="header-user">
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Cargando...</div>
+                        <div class="user-email" id="userEmail">Cargando...</div>
+                    </div>
+                    <button class="btn-logout" id="logoutBtn" title="Cerrar Sesión">
+                        🚪
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contenido -->
+            <div class="dashboard-content">
+                <!-- SECCIÓN DASHBOARD PRINCIPAL -->
+                <div id="dashboardContent" class="content-section">
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Usuarios Activos</div>
+                                <div class="stat-icon users">👥</div>
+                            </div>
+                            <div class="stat-value" id="statsUsers">-</div>
+                            <div class="stat-change">Total en el sistema</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Roles</div>
+                                <div class="stat-icon roles">🎭</div>
+                            </div>
+                            <div class="stat-value" id="statsRoles">-</div>
+                            <div class="stat-change">Roles configurados</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Servicios</div>
+                                <div class="stat-icon services">🔧</div>
+                            </div>
+                            <div class="stat-value" id="statsServices">-</div>
+                            <div class="stat-change"><span id="statsServicesOnline">-</span> en línea</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Uptime</div>
+                                <div class="stat-icon uptime">⏰</div>
+                            </div>
+                            <div class="stat-value" id="statsUptime">-</div>
+                            <div class="stat-change">Sistema estable</div>
+                        </div>
+                    </div>
+
+                    <!-- Alertas -->
+                    <div class="alerts-container">
+                        <div class="alerts-header">
+                            <div class="alerts-title">🚨 Alertas del Sistema</div>
+                        </div>
+                        <div id="alertsList">
+                            <div class="text-center" style="padding: 2rem; color: var(--gray-500);">
+                                Cargando alertas...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actividad Reciente -->
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="table-title">📈 Actividad Reciente</div>
+                            <button class="btn-secondary" onclick="refreshActivity()">🔄 Actualizar</button>
+                        </div>
+                        <div id="recentActivity">
+                            <div class="text-center" style="padding: 2rem; color: var(--gray-500);">
+                                Cargando actividad...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN USUARIOS -->
+                <div id="usersContent" class="content-section hidden">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="table-title">👥 Gestión de Usuarios</div>
+                            <div class="table-actions">
+                                <input type="text" placeholder="Buscar usuarios..." class="form-input" style="margin: 0; width: 200px;" id="usersSearch">
+                                <button class="btn btn-success" onclick="openCreateUserModal()">➕ Nuevo Usuario</button>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Email</th>
+                                    <th>Roles</th>
+                                    <th>Último Login</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr>
+                                    <td colspan="6" class="text-center" style="padding: 2rem; color: var(--gray-500);">
+                                        Cargando usuarios...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN ROLES -->
+                <div id="rolesContent" class="content-section hidden">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="table-title">🎭 Gestión de Roles</div>
+                            <div class="table-actions">
+                                <button class="btn btn-success" onclick="openCreateRoleModal()">➕ Nuevo Rol</button>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Rol</th>
+                                    <th>Descripción</th>
+                                    <th>Usuarios</th>
+                                    <th>Permisos</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rolesTableBody">
+                                <tr>
+                                    <td colspan="6" class="text-center" style="padding: 2rem; color: var(--gray-500);">
+                                        Cargando roles...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN SERVICIOS -->
+                <div id="servicesContent" class="content-section hidden">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="table-title">🔧 Microservicios Conectados</div>
+                            <div class="table-actions">
+                                <button class="btn-secondary" onclick="refreshServices()">🔄 Actualizar Estado</button>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Servicio</th>
+                                    <th>URL</th>
+                                    <th>Versión</th>
+                                    <th>Estado</th>
+                                    <th>Último Heartbeat</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="servicesTableBody">
+                                <tr>
+                                    <td colspan="6" class="text-center" style="padding: 2rem; color: var(--gray-500);">
+                                        Cargando servicios...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN MONITOREO -->
+                <div id="monitoringContent" class="content-section hidden">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="table-title">📈 Monitoreo del Sistema</div>
+                            <div class="table-actions">
+                                <select class="form-input" style="margin: 0; width: 150px;" id="metricsFilter">
+                                    <option value="1h">Última hora</option>
+                                    <option value="6h">Últimas 6 horas</option>
+                                    <option value="24h" selected>Últimas 24 horas</option>
+                                    <option value="7d">Últimos 7 días</option>
+                                </select>
+                                <button class="btn-secondary" onclick="refreshMetrics()">🔄 Actualizar</button>
+                            </div>
+                        </div>
+                        <div id="metricsContent" style="padding: 2rem; text-align: center; color: var(--gray-500);">
+                            Cargando métricas...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN AUDITORÍA -->
+                <div id="auditContent" class="content-section hidden">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="table-title">📋 Logs de Auditoría</div>
+                            <div class="table-actions">
+                                <select class="form-input" style="margin: 0; width: 150px;" id="auditFilter">
+                                    <option value="">Todas las acciones</option>
+                                    <option value="login_success">Login exitoso</option>
+                                    <option value="login_failed">Login fallido</option>
+                                    <option value="user_created">Usuario creado</option>
+                                    <option value="role_created">Rol creado</option>
+                                </select>
+                                <button class="btn-secondary" onclick="refreshAudit()">🔄 Actualizar</button>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Usuario</th>
+                                    <th>Acción</th>
+                                    <th>Recurso</th>
+                                    <th>IP</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center" style="padding: 2rem; color: var(--gray-500);">
+                                        Cargando logs de auditoría...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN CONFIGURACIÓN -->
+                <div id="settingsContent" class="content-section hidden">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="table-title">⚙️ Configuración del Sistema</div>
+                        </div>
+                        <div style="padding: 2rem;">
+                            <div class="alert alert-success">
+                                <strong>✅ Sistema funcionando correctamente</strong><br>
+                                Todas las configuraciones están optimizadas.
+                            </div>
+                            
+                            <div style="margin-top: 2rem;">
+                                <h3 style="margin-bottom: 1rem;">📊 Información del Sistema</h3>
+                                <div id="systemInfo">
+                                    Cargando información del sistema...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CREAR USUARIO -->
+    <div id="createUserModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">👤 Crear Nuevo Usuario</h3>
+                <button class="modal-close" onclick="closeModal('createUserModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createUserForm">
+                    <div class="form-group">
+                        <label for="newUserFirstName" class="form-label">Nombre</label>
+                        <input type="text" id="newUserFirstName" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newUserLastName" class="form-label">Apellido</label>
+                        <input type="text" id="newUserLastName" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newUserEmail" class="form-label">Email</label>
+                        <input type="email" id="newUserEmail" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newUserPassword" class="form-label">Contraseña</label>
+                        <input type="password" id="newUserPassword" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Roles</label>
+                        <div id="userRolesSelection" style="max-height: 200px; overflow-y: auto; border: 1px solid var(--gray-200); border-radius: var(--border-radius); padding: 1rem;">
+                            Cargando roles...
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('createUserModal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="createUser()">Crear Usuario</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CREAR ROL -->
+    <div id="createRoleModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">🎭 Crear Nuevo Rol</h3>
+                <button class="modal-close" onclick="closeModal('createRoleModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createRoleForm">
+                    <div class="form-group">
+                        <label for="newRoleName" class="form-label">Nombre del Rol</label>
+                        <input type="text" id="newRoleName" class="form-input" placeholder="mi_rol_personalizado" required>
+                        <small style="color: var(--gray-500); font-size: 0.75rem;">Solo letras minúsculas, números y guiones bajos</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newRoleDisplayName" class="form-label">Nombre para Mostrar</label>
+                        <input type="text" id="newRoleDisplayName" class="form-input" placeholder="Mi Rol Personalizado" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newRoleDescription" class="form-label">Descripción</label>
+                        <textarea id="newRoleDescription" class="form-input" rows="3" placeholder="Descripción del rol..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Permisos</label>
+                        <div id="rolePermissionsMatrix">
+                            <div class="permissions-matrix">
+                                <div class="matrix-header">
+                                    <div class="matrix-title">Matriz de Permisos por Microservicio</div>
+                                </div>
+                                <div id="permissionsMatrixContent">
+                                    Cargando permisos...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('createRoleModal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="createRole()">Crear Rol</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIGURAR SERVICIO -->
+    <div id="configureServiceModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">🔧 Configurar Microservicio</h3>
+                <button class="modal-close" onclick="closeModal('configureServiceModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="serviceConfigContent">
+                    Cargando configuración...
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('configureServiceModal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveServiceConfig()">Guardar Configuración</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICACIONES -->
+    <div id="notificationsContainer" style="position: fixed; top: 1rem; right: 1rem; z-index: 2000; max-width: 400px;"></div>
+
+    <script>
+        // ============================================================================
+        // VARIABLES GLOBALES
+        // ============================================================================
+        
+        let currentUser = null;
+        let currentSection = 'dashboard';
+        let authToken = null;
+        let refreshInterval = null;
+        
+        // ============================================================================
+        // SISTEMA DE NOTIFICACIONES
+        // ============================================================================
+        
+        function showNotification(message, type = 'info', duration = 5000) {
+            const container = document.getElementById('notificationsContainer');
+            const notification = document.createElement('div');
+            
+            const colors = {
+                success: 'var(--success)',
+                error: 'var(--error)',
+                warning: 'var(--warning)',
+                info: 'var(--primary)'
+            };
+            
+            notification.style.cssText = `
+                background: ${colors[type] || colors.info};
+                color: white;
+                padding: 1rem;
+                border-radius: var(--border-radius);
+                margin-bottom: 0.5rem;
+                box-shadow: var(--shadow-lg);
+                transform: translateX(100%);
+                transition: var(--transition);
+                cursor: pointer;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Animar entrada
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto-remover
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, duration);
+            
+            // Remover al hacer clic
+            notification.addEventListener('click', () => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            });
+        }
+        
+        // ============================================================================
+        // CLIENTE API
+        // ============================================================================
+        
+        class APIClient {
+            constructor() {
+                this.baseURL = '/api';
+            }
+            
+            async request(endpoint, options = {}) {
+                const url = `${this.baseURL}${endpoint}`;
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                };
+                
+                if (authToken) {
+                    config.headers.Authorization = `Bearer ${authToken}`;
+                }
+                
+                try {
+                    const response = await fetch(url, config);
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Error en la petición');
+                    }
+                    
+                    return data;
+                } catch (error) {
+                    console.error('API Error:', error);
+                    throw error;
+                }
+            }
+            
+            async get(endpoint) {
+                return this.request(endpoint);
+            }
+            
+            async post(endpoint, data) {
+                return this.request(endpoint, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+            }
+            
+            async put(endpoint, data) {
+                return this.request(endpoint, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+            }
+            
+            async delete(endpoint) {
+                return this.request(endpoint, {
+                    method: 'DELETE'
+                });
+            }
+        }
+        
+        const api = new APIClient();
+        
+        // ============================================================================
+        // AUTENTICACIÓN
+        // ============================================================================
+        
+        async function login(email, password, rememberMe = false) {
+            try {
+                const response = await api.post('/auth/login', {
+                    email,
+                    password,
+                    rememberMe
+                });
+                
+                if (response.success) {
+                    authToken = response.data.tokens.accessToken;
+                    currentUser = response.data.user;
+                    
+                    // Guardar en localStorage si "recordar"
+                    if (rememberMe) {
+                        localStorage.setItem('authToken', authToken);
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    }
+                    
+                    showDashboard();
+                    showNotification('¡Login exitoso!', 'success');
+                    return true;
+                }
+                
+                return false;
+            } catch (error) {
+                showNotification(error.message, 'error');
+                return false;
+            }
+        }
+        
+        async function logout() {
+            try {
+                if (authToken) {
+                    await api.post('/auth/logout');
+                }
+            } catch (error) {
+                console.error('Error en logout:', error);
+            }
+            
+            // Limpiar datos locales
+            authToken = null;
+            currentUser = null;
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            
+            // Limpiar intervalos
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+            
+            showLogin();
+            showNotification('Sesión cerrada correctamente', 'info');
+        }
+        
+        async function checkAuth() {
+            // Verificar si hay token guardado
+            const savedToken = localStorage.getItem('authToken');
+            const savedUser = localStorage.getItem('currentUser');
+            
+            if (savedToken && savedUser) {
+                authToken = savedToken;
+                
+                try {
+                    // Verificar si el token sigue siendo válido
+                    const response = await api.get('/auth/verify');
+                    if (response.success) {
+                        currentUser = response.data.user;
+                        showDashboard();
+                        return true;
+                    }
+                } catch (error) {
+                    // Token inválido, limpiar
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('currentUser');
+                }
+            }
+            
+            showLogin();
+            return false;
+        }
+        
+        // ============================================================================
+        // INTERFAZ DE USUARIO
+        // ============================================================================
+        
+        function showLogin() {
+            document.getElementById('loginSection').style.display = 'flex';
+            document.getElementById('dashboardSection').style.display = 'none';
+        }
+        
+        function showDashboard() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'block';
+            
+            // Actualizar info del usuario
+            document.getElementById('userName').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+            document.getElementById('userEmail').textContent = currentUser.email;
+            
+            // Cargar sección por defecto
+            showSection('dashboard');
+            
+            // Iniciar actualización periódica
+            startPeriodicRefresh();
+        }
+        
+        function showSection(sectionName) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Mostrar sección seleccionada
+            document.getElementById(sectionName + 'Content').classList.remove('hidden');
+            
+            // Actualizar navegación
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${sectionName}"]`).classList.add('active');
+            
+            // Actualizar título
+            const titles = {
+                dashboard: 'Dashboard',
+                users: 'Gestión de Usuarios',
+                roles: 'Gestión de Roles',
+                services: 'Microservicios',
+                monitoring: 'Monitoreo',
+                audit: 'Auditoría',
+                settings: 'Configuración'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionName] || 'Dashboard';
+            
+            currentSection = sectionName;
+            
+            // Cargar datos de la sección
+            loadSectionData(sectionName);
+        }
+        
+        async function loadSectionData(sectionName) {
+            switch (sectionName) {
+                case 'dashboard':
+                    await loadDashboardData();
+                    break;
+                case 'users':
+                    await loadUsers();
+                    break;
+                case 'roles':
+                    await loadRoles();
+                    break;
+                case 'services':
+                    await loadServices();
+                    break;
+                case 'monitoring':
+                    await loadMetrics();
+                    break;
+                case 'audit':
+                    await loadAuditLogs();
+                    break;
+                case 'settings':
+                    await loadSystemInfo();
+                    break;
+            }
+        }
+        
+        // ============================================================================
+        // CARGA DE DATOS DEL DASHBOARD
+        // ============================================================================
+        
+        async function loadDashboardData() {
+            try {
+                // Cargar estadísticas
+                const stats = await api.get('/dashboard/stats');
+                if (stats.success) {
+                    document.getElementById('statsUsers').textContent = stats.data.active_users || 0;
+                    document.getElementById('statsRoles').textContent = stats.data.total_roles || 0;
+                    document.getElementById('statsServices').textContent = stats.data.total_services || 0;
+                    document.getElementById('statsServicesOnline').textContent = stats.data.online_services || 0;
+                    document.getElementById('statsUptime').textContent = formatUptime(stats.data.uptime) || '99.9%';
+                }
+                
+                // Cargar alertas
+                await loadAlerts();
+                
+                // Cargar actividad reciente
+                await loadRecentActivity();
+                
+            } catch (error) {
+                console.error('Error cargando dashboard:', error);
+                showNotification('Error cargando datos del dashboard', 'error');
+            }
+        }
+        
+        async function loadAlerts() {
+            try {
+                const response = await api.get('/dashboard/alerts');
+                const alertsList = document.getElementById('alertsList');
+                
+                if (response.success && response.data.length > 0) {
+                    alertsList.innerHTML = response.data.map(alert => `
+                        <div class="alert-item">
+                            <div class="alert-icon" style="color: ${getAlertColor(alert.severity)};">
+                                ${getAlertIcon(alert.severity)}
+                            </div>
+                            <div class="alert-content">
+                                <div class="alert-message" style="color: ${getAlertColor(alert.severity)};">
+                                    ${alert.title}
+                                </div>
+                                <div class="alert-time">${alert.message}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    alertsList.innerHTML = `
+                        <div class="text-center" style="padding: 2rem; color: var(--success);">
+                            ✅ No hay alertas activas - Sistema funcionando correctamente
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error cargando alertas:', error);
+            }
+        }
+        
+        async function loadRecentActivity() {
+            try {
+                const response = await api.get('/dashboard/activity?limit=10');
+                const container = document.getElementById('recentActivity');
+                
+                if (response.success && response.data.length > 0) {
+                    container.innerHTML = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Usuario</th>
+                                    <th>Acción</th>
+                                    <th>Recurso</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${response.data.map(activity => `
+                                    <tr>
+                                        <td>${formatDateTime(activity.created_at)}</td>
+                                        <td>${activity.first_name} ${activity.last_name}</td>
+                                        <td><span class="badge badge-info">${formatAction(activity.action)}</span></td>
+                                        <td>${activity.resource_type || '-'}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="text-center" style="padding: 2rem; color: var(--gray-500);">
+                            No hay actividad reciente
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error cargando actividad:', error);
+            }
+        }
+        
+        // ============================================================================
+        // GESTIÓN DE USUARIOS
+        // ============================================================================
+        
+        async function loadUsers() {
+            try {
+                const response = await api.get('/users?limit=50');
+                const tbody = document.getElementById('usersTableBody');
+                
+                if (response.success && response.data.users.length > 0) {
+                    tbody.innerHTML = response.data.users.map(user => `
+                        <tr>
+                            <td>
+                                <div>
+                                    <div style="font-weight: 500;">${user.first_name} ${user.last_name}</div>
+                                    <div style="font-size: 0.75rem; color: var(--gray-500);">ID: ${user.id.substring(0, 8)}...</div>
+                                </div>
+                            </td>
+                            <td>${user.email}</td>
+                            <td>
+                                ${(user.roles || []).map(role => `
+                                    <span class="badge badge-info" style="margin-right: 0.25rem;">${role.display_name}</span>
+                                `).join('')}
+                            </td>
+                            <td>${user.last_login_at ? formatDateTime(user.last_login_at) : 'Nunca'}</td>
+                            <td>
+                                <span class="badge ${user.is_active ? 'badge-success' : 'badge-error'}">
+                                    ${user.is_active ? 'Activo' : 'Inactivo'}
+                                </span>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 0.25rem;">
+                                    <button class="btn-secondary" onclick="editUser('${user.id}')" title="Editar">✏️</button>
+                                    <button class="btn-secondary" onclick="viewUserActivity('${user.id}')" title="Ver Actividad">📊</button>
+                                    ${user.id !== currentUser.id ? `<button class="btn-secondary" onclick="deleteUser('${user.id}')" title="Eliminar" style="color: var(--error);">🗑️</button>` : ''}
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center" style="padding: 2rem; color: var(--gray-500);">
+                                No hay servicios registrados
+                            </td>
+                        </tr>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error cargando servicios:', error);
+                showNotification('Error cargando servicios', 'error');
+            }
+        }
+        
+        // ============================================================================
+        // FUNCIONES AUXILIARES
+        // ============================================================================
+        
+        function formatDateTime(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleString('es-ES', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        function formatUptime(seconds) {
+            if (!seconds) return '-';
+            const days = Math.floor(seconds / 86400);
+            const hours = Math.floor((seconds % 86400) / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            
+            if (days > 0) return `${days}d ${hours}h`;
+            if (hours > 0) return `${hours}h ${minutes}m`;
+            return `${minutes}m`;
+        }
+        
+        function formatAction(action) {
+            const actionMap = {
+                'login_success': 'Login Exitoso',
+                'login_failed': 'Login Fallido',
+                'logout': 'Logout',
+                'user_created': 'Usuario Creado',
+                'user_updated': 'Usuario Actualizado',
+                'user_deleted': 'Usuario Eliminado',
+                'role_created': 'Rol Creado',
+                'role_updated': 'Rol Actualizado',
+                'role_deleted': 'Rol Eliminado',
+                'service_registered': 'Servicio Registrado',
+                'permissions_assigned': 'Permisos Asignados'
+            };
+            return actionMap[action] || action;
+        }
+        
+        function getAlertColor(severity) {
+            const colors = {
+                error: 'var(--error)',
+                warning: 'var(--warning)',
+                info: 'var(--primary)',
+                success: 'var(--success)'
+            };
+            return colors[severity] || colors.info;
+        }
+        
+        function getAlertIcon(severity) {
+            const icons = {
+                error: '🚨',
+                warning: '⚠️',
+                info: 'ℹ️',
+                success: '✅'
+            };
+            return icons[severity] || icons.info;
+        }
+        
+        function getServiceStatusBadge(status) {
+            const badgeMap = {
+                online: 'badge-success',
+                warning: 'badge-warning',
+                offline: 'badge-error'
+            };
+            return badgeMap[status] || 'badge-error';
+        }
+        
+        function getServiceStatusText(status) {
+            const textMap = {
+                online: 'En línea',
+                warning: 'Advertencia',
+                offline: 'Desconectado'
+            };
+            return textMap[status] || 'Desconocido';
+        }
+        
+        // ============================================================================
+        // GESTIÓN DE MODALES
+        // ============================================================================
+        
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // ============================================================================
+        // FUNCIONES DE REFRESH
+        // ============================================================================
+        
+        function startPeriodicRefresh() {
+            // Actualizar datos cada 30 segundos
+            refreshInterval = setInterval(() => {
+                if (currentSection === 'dashboard') {
+                    loadDashboardData();
+                } else if (currentSection === 'services') {
+                    loadServices();
+                }
+            }, 30000);
+        }
+        
+        async function refreshServices() {
+            showNotification('Actualizando estado de servicios...', 'info', 2000);
+            await loadServices();
+        }
+        
+        async function refreshActivity() {
+            await loadRecentActivity();
+            showNotification('Actividad actualizada', 'success', 2000);
+        }
+        
+        async function refreshMetrics() {
+            await loadMetrics();
+            showNotification('Métricas actualizadas', 'success', 2000);
+        }
+        
+        async function refreshAudit() {
+            await loadAuditLogs();
+            showNotification('Logs actualizados', 'success', 2000);
+        }
+        
+        // ============================================================================
+        // FUNCIONES PLACEHOLDER (para completar después)
+        // ============================================================================
+        
+        async function loadMetrics() {
+            const content = document.getElementById('metricsContent');
+            content.innerHTML = `
+                <div style="padding: 3rem; text-align: center;">
+                    <h3 style="color: var(--gray-600); margin-bottom: 1rem;">📈 Métricas del Sistema</h3>
+                    <p style="color: var(--gray-500);">Panel de métricas en desarrollo...</p>
+                    <div style="margin-top: 2rem;">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-title">Requests/hora</div>
+                                <div class="stat-value">1,234</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-title">Tiempo Respuesta</div>
+                                <div class="stat-value">45ms</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-title">Errores</div>
+                                <div class="stat-value">0.1%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function loadAuditLogs() {
+            try {
+                const response = await api.get('/monitoring/logs?limit=50');
+                const tbody = document.getElementById('auditTableBody');
+                
+                if (response.success && response.data.logs.length > 0) {
+                    tbody.innerHTML = response.data.logs.map(log => `
+                        <tr>
+                            <td>${formatDateTime(log.created_at)}</td>
+                            <td>${log.first_name && log.last_name ? `${log.first_name} ${log.last_name}` : 'Sistema'}</td>
+                            <td><span class="badge badge-info">${formatAction(log.action)}</span></td>
+                            <td>${log.resource_type || '-'}</td>
+                            <td>${log.ip_address || '-'}</td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="text-center" style="padding: 2rem; color: var(--gray-500);">
+                                No hay logs de auditoría
+                            </td>
+                        </tr>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error cargando logs:', error);
+            }
+        }
+        
+        async function loadSystemInfo() {
+            try {
+                const response = await api.get('/system/info');
+                const container = document.getElementById('systemInfo');
+                
+                if (response.success) {
+                    const info = response.data;
+                    container.innerHTML = `
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-title">Uptime</div>
+                                <div class="stat-value">${formatUptime(info.system?.uptime)}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-title">Memoria</div>
+                                <div class="stat-value">${Math.round((info.system?.memory?.used || 0) / 1024 / 1024)}MB</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-title">Node.js</div>
+                                <div class="stat-value">${info.system?.node_version || 'N/A'}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-title">Base de Datos</div>
+                                <div class="stat-value">
+                                    <span class="badge ${info.database?.connected ? 'badge-success' : 'badge-error'}">
+                                        ${info.database?.connected ? 'Conectada' : 'Desconectada'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error cargando información del sistema:', error);
+            }
+        }
+        
+        // Funciones placeholder para completar
+        function editUser(userId) {
+            showNotification('Funcionalidad en desarrollo', 'info');
+        }
+        
+        function deleteUser(userId) {
+            if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
+                showNotification('Funcionalidad en desarrollo', 'info');
+            }
+        }
+        
+        function viewUserActivity(userId) {
+            showNotification('Funcionalidad en desarrollo', 'info');
+        }
+        
+        function editRole(roleId) {
+            showNotification('Funcionalidad en desarrollo', 'info');
+        }
+        
+        function deleteRole(roleId) {
+            if (confirm('¿Estás seguro de que quieres eliminar este rol?')) {
+                showNotification('Funcionalidad en desarrollo', 'info');
+            }
+        }
+        
+        function cloneRole(roleId) {
+            showNotification('Funcionalidad en desarrollo', 'info');
+        }
+        
+        function configureService(serviceId) {
+            showNotification('Funcionalidad en desarrollo', 'info');
+        }
+        
+        function viewServiceRoutes(serviceId) {
+            showNotification('Funcionalidad en desarrollo', 'info');
+        }
+        
+        function testServiceHealth(serviceId) {
+            showNotification('Probando salud del servicio...', 'info');
+        }
+        
+        function saveServiceConfig() {
+            showNotification('Configuración guardada', 'success');
+            closeModal('configureServiceModal');
+        }
+        
+        // ============================================================================
+        // EVENT LISTENERS
+        // ============================================================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Form de login
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('rememberMe').checked;
+                
+                const loginBtn = document.getElementById('loginBtn');
+                const loginBtnText = document.getElementById('loginBtnText');
+                const loginBtnLoading = document.getElementById('loginBtnLoading');
+                const loginAlert = document.getElementById('loginAlert');
+                
+                // Mostrar loading
+                loginBtn.disabled = true;
+                loginBtnText.style.display = 'none';
+                loginBtnLoading.classList.remove('hidden');
+                loginAlert.classList.add('hidden');
+                
+                try {
+                    const success = await login(email, password, rememberMe);
+                    
+                    if (!success) {
+                        loginAlert.textContent = 'Credenciales inválidas. Verifica tu email y contraseña.';
+                        loginAlert.classList.remove('hidden');
+                    }
+                } catch (error) {
+                    loginAlert.textContent = error.message || 'Error al iniciar sesión';
+                    loginAlert.classList.remove('hidden');
+                } finally {
+                    // Ocultar loading
+                    loginBtn.disabled = false;
+                    loginBtnText.style.display = 'inline';
+                    loginBtnLoading.classList.add('hidden');
+                }
+            });
+            
+            // Navegación del sidebar
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = item.getAttribute('data-section');
+                    showSection(section);
+                });
+            });
+            
+            // Botón de logout
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            
+            // Cerrar modales al hacer clic fuera
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+            
+            // Escape para cerrar modales
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                        modal.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                }
+            });
+            
+            // Búsqueda de usuarios
+            document.getElementById('usersSearch').addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const rows = document.querySelectorAll('#usersTableBody tr');
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            });
+            
+            // Auto-completar nombre para mostrar en rol
+            document.getElementById('newRoleName').addEventListener('input', (e) => {
+                const name = e.target.value;
+                const displayName = document.getElementById('newRoleDisplayName');
+                
+                if (!displayName.value) {
+                    // Convertir snake_case a Title Case
+                    const formatted = name
+                        .split('_')
+                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(' ');
+                    displayName.value = formatted;
+                }
+            });
+            
+            // Verificar autenticación al cargar
+            checkAuth();
+        });
+        
+        // Manejar errores globales
+        window.addEventListener('error', (e) => {
+            console.error('Error global:', e.error);
+            showNotification('Ha ocurrido un error inesperado', 'error');
+        });
+        
+        // Manejar errores de promesas no capturadas
+        window.addEventListener('unhandledrejection', (e) => {
+            console.error('Promise rejection no manejada:', e.reason);
+            showNotification('Error de comunicación con el servidor', 'error');
+        });
+    </script>
+</body>
+</html>
