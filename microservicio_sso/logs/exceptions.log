@@ -6388,3 +6388,1423 @@
   environment: 'production',
   timestamp: '2025-07-30 23:44:32'
 }
+{
+  error: Error: Route.get() requires a callback function but got a [object Object]
+      at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)
+      at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)
+      at Object.<anonymous> (/app/src/routes/auth.js:306:8)
+      at Module._compile (node:internal/modules/cjs/loader:1364:14)
+      at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+      at Module.load (node:internal/modules/cjs/loader:1203:32)
+      at Module._load (node:internal/modules/cjs/loader:1019:12)
+      at Module.require (node:internal/modules/cjs/loader:1231:19)
+      at require (node:internal/modules/helpers:177:18)
+      at Object.<anonymous> (/app/src/app.js:19:20),
+  level: 'error',
+  message: 'uncaughtException: Route.get() requires a callback function but got a [object Object]\n' +
+    'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  stack: 'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  exception: true,
+  date: 'Thu Jul 31 2025 00:14:31 GMT+0000 (Coordinated Universal Time)',
+  process: {
+    pid: 18,
+    uid: 1001,
+    gid: 1001,
+    cwd: '/app',
+    execPath: '/usr/local/bin/node',
+    version: 'v18.20.8',
+    argv: [ '/usr/local/bin/node', '/app/src/app.js' ],
+    memoryUsage: {
+      rss: 108244992,
+      heapTotal: 60616704,
+      heapUsed: 37509256,
+      external: 3084539,
+      arrayBuffers: 429576
+    }
+  },
+  os: { loadavg: [ 1.16, 0.37, 0.23 ], uptime: 12735.95 },
+  trace: [
+    {
+      column: 15,
+      file: '/app/node_modules/express/lib/router/route.js',
+      function: 'Route.<computed> [as get]',
+      line: 216,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 19,
+      file: '/app/node_modules/express/lib/router/index.js',
+      function: 'proto.<computed> [as get]',
+      line: 521,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 8,
+      file: '/app/src/routes/auth.js',
+      function: null,
+      line: 306,
+      method: null,
+      native: false
+    },
+    {
+      column: 14,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._compile',
+      line: 1364,
+      method: '_compile',
+      native: false
+    },
+    {
+      column: 10,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._extensions..js',
+      line: 1422,
+      method: '.js',
+      native: false
+    },
+    {
+      column: 32,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.load',
+      line: 1203,
+      method: 'load',
+      native: false
+    },
+    {
+      column: 12,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._load',
+      line: 1019,
+      method: '_load',
+      native: false
+    },
+    {
+      column: 19,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.require',
+      line: 1231,
+      method: 'require',
+      native: false
+    },
+    {
+      column: 18,
+      file: 'node:internal/modules/helpers',
+      function: 'require',
+      line: 177,
+      method: null,
+      native: false
+    },
+    {
+      column: 20,
+      file: '/app/src/app.js',
+      function: null,
+      line: 19,
+      method: null,
+      native: false
+    }
+  ],
+  service: 'sso-microservice',
+  version: '1.0.0',
+  environment: 'production',
+  timestamp: '2025-07-31 00:14:31'
+}
+{
+  error: Error: Route.get() requires a callback function but got a [object Object]
+      at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)
+      at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)
+      at Object.<anonymous> (/app/src/routes/auth.js:306:8)
+      at Module._compile (node:internal/modules/cjs/loader:1364:14)
+      at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+      at Module.load (node:internal/modules/cjs/loader:1203:32)
+      at Module._load (node:internal/modules/cjs/loader:1019:12)
+      at Module.require (node:internal/modules/cjs/loader:1231:19)
+      at require (node:internal/modules/helpers:177:18)
+      at Object.<anonymous> (/app/src/app.js:19:20),
+  level: 'error',
+  message: 'uncaughtException: Route.get() requires a callback function but got a [object Object]\n' +
+    'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  stack: 'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  exception: true,
+  date: 'Thu Jul 31 2025 00:14:32 GMT+0000 (Coordinated Universal Time)',
+  process: {
+    pid: 18,
+    uid: 1001,
+    gid: 1001,
+    cwd: '/app',
+    execPath: '/usr/local/bin/node',
+    version: 'v18.20.8',
+    argv: [ '/usr/local/bin/node', '/app/src/app.js' ],
+    memoryUsage: {
+      rss: 107732992,
+      heapTotal: 60616704,
+      heapUsed: 37543208,
+      external: 3076347,
+      arrayBuffers: 421384
+    }
+  },
+  os: { loadavg: [ 1.16, 0.37, 0.23 ], uptime: 12737.76 },
+  trace: [
+    {
+      column: 15,
+      file: '/app/node_modules/express/lib/router/route.js',
+      function: 'Route.<computed> [as get]',
+      line: 216,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 19,
+      file: '/app/node_modules/express/lib/router/index.js',
+      function: 'proto.<computed> [as get]',
+      line: 521,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 8,
+      file: '/app/src/routes/auth.js',
+      function: null,
+      line: 306,
+      method: null,
+      native: false
+    },
+    {
+      column: 14,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._compile',
+      line: 1364,
+      method: '_compile',
+      native: false
+    },
+    {
+      column: 10,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._extensions..js',
+      line: 1422,
+      method: '.js',
+      native: false
+    },
+    {
+      column: 32,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.load',
+      line: 1203,
+      method: 'load',
+      native: false
+    },
+    {
+      column: 12,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._load',
+      line: 1019,
+      method: '_load',
+      native: false
+    },
+    {
+      column: 19,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.require',
+      line: 1231,
+      method: 'require',
+      native: false
+    },
+    {
+      column: 18,
+      file: 'node:internal/modules/helpers',
+      function: 'require',
+      line: 177,
+      method: null,
+      native: false
+    },
+    {
+      column: 20,
+      file: '/app/src/app.js',
+      function: null,
+      line: 19,
+      method: null,
+      native: false
+    }
+  ],
+  service: 'sso-microservice',
+  version: '1.0.0',
+  environment: 'production',
+  timestamp: '2025-07-31 00:14:32'
+}
+{
+  error: Error: Route.get() requires a callback function but got a [object Object]
+      at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)
+      at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)
+      at Object.<anonymous> (/app/src/routes/auth.js:306:8)
+      at Module._compile (node:internal/modules/cjs/loader:1364:14)
+      at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+      at Module.load (node:internal/modules/cjs/loader:1203:32)
+      at Module._load (node:internal/modules/cjs/loader:1019:12)
+      at Module.require (node:internal/modules/cjs/loader:1231:19)
+      at require (node:internal/modules/helpers:177:18)
+      at Object.<anonymous> (/app/src/app.js:19:20),
+  level: 'error',
+  message: 'uncaughtException: Route.get() requires a callback function but got a [object Object]\n' +
+    'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  stack: 'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  exception: true,
+  date: 'Thu Jul 31 2025 00:14:34 GMT+0000 (Coordinated Universal Time)',
+  process: {
+    pid: 18,
+    uid: 1001,
+    gid: 1001,
+    cwd: '/app',
+    execPath: '/usr/local/bin/node',
+    version: 'v18.20.8',
+    argv: [ '/usr/local/bin/node', '/app/src/app.js' ],
+    memoryUsage: {
+      rss: 108036096,
+      heapTotal: 60616704,
+      heapUsed: 37596808,
+      external: 3076347,
+      arrayBuffers: 421384
+    }
+  },
+  os: { loadavg: [ 1.16, 0.37, 0.23 ], uptime: 12739.05 },
+  trace: [
+    {
+      column: 15,
+      file: '/app/node_modules/express/lib/router/route.js',
+      function: 'Route.<computed> [as get]',
+      line: 216,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 19,
+      file: '/app/node_modules/express/lib/router/index.js',
+      function: 'proto.<computed> [as get]',
+      line: 521,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 8,
+      file: '/app/src/routes/auth.js',
+      function: null,
+      line: 306,
+      method: null,
+      native: false
+    },
+    {
+      column: 14,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._compile',
+      line: 1364,
+      method: '_compile',
+      native: false
+    },
+    {
+      column: 10,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._extensions..js',
+      line: 1422,
+      method: '.js',
+      native: false
+    },
+    {
+      column: 32,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.load',
+      line: 1203,
+      method: 'load',
+      native: false
+    },
+    {
+      column: 12,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._load',
+      line: 1019,
+      method: '_load',
+      native: false
+    },
+    {
+      column: 19,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.require',
+      line: 1231,
+      method: 'require',
+      native: false
+    },
+    {
+      column: 18,
+      file: 'node:internal/modules/helpers',
+      function: 'require',
+      line: 177,
+      method: null,
+      native: false
+    },
+    {
+      column: 20,
+      file: '/app/src/app.js',
+      function: null,
+      line: 19,
+      method: null,
+      native: false
+    }
+  ],
+  service: 'sso-microservice',
+  version: '1.0.0',
+  environment: 'production',
+  timestamp: '2025-07-31 00:14:34'
+}
+{
+  error: Error: Route.get() requires a callback function but got a [object Object]
+      at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)
+      at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)
+      at Object.<anonymous> (/app/src/routes/auth.js:306:8)
+      at Module._compile (node:internal/modules/cjs/loader:1364:14)
+      at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+      at Module.load (node:internal/modules/cjs/loader:1203:32)
+      at Module._load (node:internal/modules/cjs/loader:1019:12)
+      at Module.require (node:internal/modules/cjs/loader:1231:19)
+      at require (node:internal/modules/helpers:177:18)
+      at Object.<anonymous> (/app/src/app.js:19:20),
+  level: 'error',
+  message: 'uncaughtException: Route.get() requires a callback function but got a [object Object]\n' +
+    'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  stack: 'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  exception: true,
+  date: 'Thu Jul 31 2025 00:14:35 GMT+0000 (Coordinated Universal Time)',
+  process: {
+    pid: 18,
+    uid: 1001,
+    gid: 1001,
+    cwd: '/app',
+    execPath: '/usr/local/bin/node',
+    version: 'v18.20.8',
+    argv: [ '/usr/local/bin/node', '/app/src/app.js' ],
+    memoryUsage: {
+      rss: 107933696,
+      heapTotal: 60878848,
+      heapUsed: 37540352,
+      external: 3076347,
+      arrayBuffers: 421384
+    }
+  },
+  os: { loadavg: [ 1.23, 0.39, 0.24 ], uptime: 12740.49 },
+  trace: [
+    {
+      column: 15,
+      file: '/app/node_modules/express/lib/router/route.js',
+      function: 'Route.<computed> [as get]',
+      line: 216,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 19,
+      file: '/app/node_modules/express/lib/router/index.js',
+      function: 'proto.<computed> [as get]',
+      line: 521,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 8,
+      file: '/app/src/routes/auth.js',
+      function: null,
+      line: 306,
+      method: null,
+      native: false
+    },
+    {
+      column: 14,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._compile',
+      line: 1364,
+      method: '_compile',
+      native: false
+    },
+    {
+      column: 10,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._extensions..js',
+      line: 1422,
+      method: '.js',
+      native: false
+    },
+    {
+      column: 32,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.load',
+      line: 1203,
+      method: 'load',
+      native: false
+    },
+    {
+      column: 12,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._load',
+      line: 1019,
+      method: '_load',
+      native: false
+    },
+    {
+      column: 19,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.require',
+      line: 1231,
+      method: 'require',
+      native: false
+    },
+    {
+      column: 18,
+      file: 'node:internal/modules/helpers',
+      function: 'require',
+      line: 177,
+      method: null,
+      native: false
+    },
+    {
+      column: 20,
+      file: '/app/src/app.js',
+      function: null,
+      line: 19,
+      method: null,
+      native: false
+    }
+  ],
+  service: 'sso-microservice',
+  version: '1.0.0',
+  environment: 'production',
+  timestamp: '2025-07-31 00:14:35'
+}
+{
+  error: Error: Route.get() requires a callback function but got a [object Object]
+      at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)
+      at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)
+      at Object.<anonymous> (/app/src/routes/auth.js:306:8)
+      at Module._compile (node:internal/modules/cjs/loader:1364:14)
+      at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+      at Module.load (node:internal/modules/cjs/loader:1203:32)
+      at Module._load (node:internal/modules/cjs/loader:1019:12)
+      at Module.require (node:internal/modules/cjs/loader:1231:19)
+      at require (node:internal/modules/helpers:177:18)
+      at Object.<anonymous> (/app/src/app.js:19:20),
+  level: 'error',
+  message: 'uncaughtException: Route.get() requires a callback function but got a [object Object]\n' +
+    'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  stack: 'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  exception: true,
+  date: 'Thu Jul 31 2025 00:14:37 GMT+0000 (Coordinated Universal Time)',
+  process: {
+    pid: 19,
+    uid: 1001,
+    gid: 1001,
+    cwd: '/app',
+    execPath: '/usr/local/bin/node',
+    version: 'v18.20.8',
+    argv: [ '/usr/local/bin/node', '/app/src/app.js' ],
+    memoryUsage: {
+      rss: 107847680,
+      heapTotal: 60878848,
+      heapUsed: 37600496,
+      external: 3076347,
+      arrayBuffers: 421384
+    }
+  },
+  os: { loadavg: [ 1.23, 0.39, 0.24 ], uptime: 12742.43 },
+  trace: [
+    {
+      column: 15,
+      file: '/app/node_modules/express/lib/router/route.js',
+      function: 'Route.<computed> [as get]',
+      line: 216,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 19,
+      file: '/app/node_modules/express/lib/router/index.js',
+      function: 'proto.<computed> [as get]',
+      line: 521,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 8,
+      file: '/app/src/routes/auth.js',
+      function: null,
+      line: 306,
+      method: null,
+      native: false
+    },
+    {
+      column: 14,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._compile',
+      line: 1364,
+      method: '_compile',
+      native: false
+    },
+    {
+      column: 10,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._extensions..js',
+      line: 1422,
+      method: '.js',
+      native: false
+    },
+    {
+      column: 32,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.load',
+      line: 1203,
+      method: 'load',
+      native: false
+    },
+    {
+      column: 12,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._load',
+      line: 1019,
+      method: '_load',
+      native: false
+    },
+    {
+      column: 19,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.require',
+      line: 1231,
+      method: 'require',
+      native: false
+    },
+    {
+      column: 18,
+      file: 'node:internal/modules/helpers',
+      function: 'require',
+      line: 177,
+      method: null,
+      native: false
+    },
+    {
+      column: 20,
+      file: '/app/src/app.js',
+      function: null,
+      line: 19,
+      method: null,
+      native: false
+    }
+  ],
+  service: 'sso-microservice',
+  version: '1.0.0',
+  environment: 'production',
+  timestamp: '2025-07-31 00:14:37'
+}
+{
+  error: Error: Route.get() requires a callback function but got a [object Object]
+      at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)
+      at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)
+      at Object.<anonymous> (/app/src/routes/auth.js:306:8)
+      at Module._compile (node:internal/modules/cjs/loader:1364:14)
+      at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+      at Module.load (node:internal/modules/cjs/loader:1203:32)
+      at Module._load (node:internal/modules/cjs/loader:1019:12)
+      at Module.require (node:internal/modules/cjs/loader:1231:19)
+      at require (node:internal/modules/helpers:177:18)
+      at Object.<anonymous> (/app/src/app.js:19:20),
+  level: 'error',
+  message: 'uncaughtException: Route.get() requires a callback function but got a [object Object]\n' +
+    'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  stack: 'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  exception: true,
+  date: 'Thu Jul 31 2025 00:14:40 GMT+0000 (Coordinated Universal Time)',
+  process: {
+    pid: 18,
+    uid: 1001,
+    gid: 1001,
+    cwd: '/app',
+    execPath: '/usr/local/bin/node',
+    version: 'v18.20.8',
+    argv: [ '/usr/local/bin/node', '/app/src/app.js' ],
+    memoryUsage: {
+      rss: 107884544,
+      heapTotal: 60878848,
+      heapUsed: 37575944,
+      external: 3076347,
+      arrayBuffers: 421384
+    }
+  },
+  os: { loadavg: [ 1.23, 0.39, 0.24 ], uptime: 12745.21 },
+  trace: [
+    {
+      column: 15,
+      file: '/app/node_modules/express/lib/router/route.js',
+      function: 'Route.<computed> [as get]',
+      line: 216,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 19,
+      file: '/app/node_modules/express/lib/router/index.js',
+      function: 'proto.<computed> [as get]',
+      line: 521,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 8,
+      file: '/app/src/routes/auth.js',
+      function: null,
+      line: 306,
+      method: null,
+      native: false
+    },
+    {
+      column: 14,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._compile',
+      line: 1364,
+      method: '_compile',
+      native: false
+    },
+    {
+      column: 10,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._extensions..js',
+      line: 1422,
+      method: '.js',
+      native: false
+    },
+    {
+      column: 32,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.load',
+      line: 1203,
+      method: 'load',
+      native: false
+    },
+    {
+      column: 12,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._load',
+      line: 1019,
+      method: '_load',
+      native: false
+    },
+    {
+      column: 19,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.require',
+      line: 1231,
+      method: 'require',
+      native: false
+    },
+    {
+      column: 18,
+      file: 'node:internal/modules/helpers',
+      function: 'require',
+      line: 177,
+      method: null,
+      native: false
+    },
+    {
+      column: 20,
+      file: '/app/src/app.js',
+      function: null,
+      line: 19,
+      method: null,
+      native: false
+    }
+  ],
+  service: 'sso-microservice',
+  version: '1.0.0',
+  environment: 'production',
+  timestamp: '2025-07-31 00:14:40'
+}
+{
+  error: Error: Route.get() requires a callback function but got a [object Object]
+      at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)
+      at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)
+      at Object.<anonymous> (/app/src/routes/auth.js:306:8)
+      at Module._compile (node:internal/modules/cjs/loader:1364:14)
+      at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+      at Module.load (node:internal/modules/cjs/loader:1203:32)
+      at Module._load (node:internal/modules/cjs/loader:1019:12)
+      at Module.require (node:internal/modules/cjs/loader:1231:19)
+      at require (node:internal/modules/helpers:177:18)
+      at Object.<anonymous> (/app/src/app.js:19:20),
+  level: 'error',
+  message: 'uncaughtException: Route.get() requires a callback function but got a [object Object]\n' +
+    'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  stack: 'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  exception: true,
+  date: 'Thu Jul 31 2025 00:14:44 GMT+0000 (Coordinated Universal Time)',
+  process: {
+    pid: 18,
+    uid: 1001,
+    gid: 1001,
+    cwd: '/app',
+    execPath: '/usr/local/bin/node',
+    version: 'v18.20.8',
+    argv: [ '/usr/local/bin/node', '/app/src/app.js' ],
+    memoryUsage: {
+      rss: 107986944,
+      heapTotal: 60878848,
+      heapUsed: 37562616,
+      external: 3076347,
+      arrayBuffers: 421384
+    }
+  },
+  os: { loadavg: [ 1.45, 0.45, 0.26 ], uptime: 12749.78 },
+  trace: [
+    {
+      column: 15,
+      file: '/app/node_modules/express/lib/router/route.js',
+      function: 'Route.<computed> [as get]',
+      line: 216,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 19,
+      file: '/app/node_modules/express/lib/router/index.js',
+      function: 'proto.<computed> [as get]',
+      line: 521,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 8,
+      file: '/app/src/routes/auth.js',
+      function: null,
+      line: 306,
+      method: null,
+      native: false
+    },
+    {
+      column: 14,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._compile',
+      line: 1364,
+      method: '_compile',
+      native: false
+    },
+    {
+      column: 10,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._extensions..js',
+      line: 1422,
+      method: '.js',
+      native: false
+    },
+    {
+      column: 32,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.load',
+      line: 1203,
+      method: 'load',
+      native: false
+    },
+    {
+      column: 12,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._load',
+      line: 1019,
+      method: '_load',
+      native: false
+    },
+    {
+      column: 19,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.require',
+      line: 1231,
+      method: 'require',
+      native: false
+    },
+    {
+      column: 18,
+      file: 'node:internal/modules/helpers',
+      function: 'require',
+      line: 177,
+      method: null,
+      native: false
+    },
+    {
+      column: 20,
+      file: '/app/src/app.js',
+      function: null,
+      line: 19,
+      method: null,
+      native: false
+    }
+  ],
+  service: 'sso-microservice',
+  version: '1.0.0',
+  environment: 'production',
+  timestamp: '2025-07-31 00:14:44'
+}
+{
+  error: Error: Route.get() requires a callback function but got a [object Object]
+      at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)
+      at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)
+      at Object.<anonymous> (/app/src/routes/auth.js:306:8)
+      at Module._compile (node:internal/modules/cjs/loader:1364:14)
+      at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+      at Module.load (node:internal/modules/cjs/loader:1203:32)
+      at Module._load (node:internal/modules/cjs/loader:1019:12)
+      at Module.require (node:internal/modules/cjs/loader:1231:19)
+      at require (node:internal/modules/helpers:177:18)
+      at Object.<anonymous> (/app/src/app.js:19:20),
+  level: 'error',
+  message: 'uncaughtException: Route.get() requires a callback function but got a [object Object]\n' +
+    'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  stack: 'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  exception: true,
+  date: 'Thu Jul 31 2025 00:14:52 GMT+0000 (Coordinated Universal Time)',
+  process: {
+    pid: 18,
+    uid: 1001,
+    gid: 1001,
+    cwd: '/app',
+    execPath: '/usr/local/bin/node',
+    version: 'v18.20.8',
+    argv: [ '/usr/local/bin/node', '/app/src/app.js' ],
+    memoryUsage: {
+      rss: 108331008,
+      heapTotal: 61140992,
+      heapUsed: 37636488,
+      external: 3076347,
+      arrayBuffers: 421384
+    }
+  },
+  os: { loadavg: [ 1.53, 0.51, 0.28 ], uptime: 12757.37 },
+  trace: [
+    {
+      column: 15,
+      file: '/app/node_modules/express/lib/router/route.js',
+      function: 'Route.<computed> [as get]',
+      line: 216,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 19,
+      file: '/app/node_modules/express/lib/router/index.js',
+      function: 'proto.<computed> [as get]',
+      line: 521,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 8,
+      file: '/app/src/routes/auth.js',
+      function: null,
+      line: 306,
+      method: null,
+      native: false
+    },
+    {
+      column: 14,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._compile',
+      line: 1364,
+      method: '_compile',
+      native: false
+    },
+    {
+      column: 10,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._extensions..js',
+      line: 1422,
+      method: '.js',
+      native: false
+    },
+    {
+      column: 32,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.load',
+      line: 1203,
+      method: 'load',
+      native: false
+    },
+    {
+      column: 12,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._load',
+      line: 1019,
+      method: '_load',
+      native: false
+    },
+    {
+      column: 19,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.require',
+      line: 1231,
+      method: 'require',
+      native: false
+    },
+    {
+      column: 18,
+      file: 'node:internal/modules/helpers',
+      function: 'require',
+      line: 177,
+      method: null,
+      native: false
+    },
+    {
+      column: 20,
+      file: '/app/src/app.js',
+      function: null,
+      line: 19,
+      method: null,
+      native: false
+    }
+  ],
+  service: 'sso-microservice',
+  version: '1.0.0',
+  environment: 'production',
+  timestamp: '2025-07-31 00:14:52'
+}
+{
+  error: Error: Route.get() requires a callback function but got a [object Object]
+      at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)
+      at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)
+      at Object.<anonymous> (/app/src/routes/auth.js:306:8)
+      at Module._compile (node:internal/modules/cjs/loader:1364:14)
+      at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+      at Module.load (node:internal/modules/cjs/loader:1203:32)
+      at Module._load (node:internal/modules/cjs/loader:1019:12)
+      at Module.require (node:internal/modules/cjs/loader:1231:19)
+      at require (node:internal/modules/helpers:177:18)
+      at Object.<anonymous> (/app/src/app.js:19:20),
+  level: 'error',
+  message: 'uncaughtException: Route.get() requires a callback function but got a [object Object]\n' +
+    'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  stack: 'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  exception: true,
+  date: 'Thu Jul 31 2025 00:15:06 GMT+0000 (Coordinated Universal Time)',
+  process: {
+    pid: 18,
+    uid: 1001,
+    gid: 1001,
+    cwd: '/app',
+    execPath: '/usr/local/bin/node',
+    version: 'v18.20.8',
+    argv: [ '/usr/local/bin/node', '/app/src/app.js' ],
+    memoryUsage: {
+      rss: 106786816,
+      heapTotal: 60616704,
+      heapUsed: 36347400,
+      external: 3049193,
+      arrayBuffers: 394230
+    }
+  },
+  os: { loadavg: [ 1.42, 0.53, 0.29 ], uptime: 12771.52 },
+  trace: [
+    {
+      column: 15,
+      file: '/app/node_modules/express/lib/router/route.js',
+      function: 'Route.<computed> [as get]',
+      line: 216,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 19,
+      file: '/app/node_modules/express/lib/router/index.js',
+      function: 'proto.<computed> [as get]',
+      line: 521,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 8,
+      file: '/app/src/routes/auth.js',
+      function: null,
+      line: 306,
+      method: null,
+      native: false
+    },
+    {
+      column: 14,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._compile',
+      line: 1364,
+      method: '_compile',
+      native: false
+    },
+    {
+      column: 10,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._extensions..js',
+      line: 1422,
+      method: '.js',
+      native: false
+    },
+    {
+      column: 32,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.load',
+      line: 1203,
+      method: 'load',
+      native: false
+    },
+    {
+      column: 12,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._load',
+      line: 1019,
+      method: '_load',
+      native: false
+    },
+    {
+      column: 19,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.require',
+      line: 1231,
+      method: 'require',
+      native: false
+    },
+    {
+      column: 18,
+      file: 'node:internal/modules/helpers',
+      function: 'require',
+      line: 177,
+      method: null,
+      native: false
+    },
+    {
+      column: 20,
+      file: '/app/src/app.js',
+      function: null,
+      line: 19,
+      method: null,
+      native: false
+    }
+  ],
+  service: 'sso-microservice',
+  version: '1.0.0',
+  environment: 'production',
+  timestamp: '2025-07-31 00:15:06'
+}
+{
+  error: Error: Route.get() requires a callback function but got a [object Object]
+      at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)
+      at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)
+      at Object.<anonymous> (/app/src/routes/auth.js:306:8)
+      at Module._compile (node:internal/modules/cjs/loader:1364:14)
+      at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)
+      at Module.load (node:internal/modules/cjs/loader:1203:32)
+      at Module._load (node:internal/modules/cjs/loader:1019:12)
+      at Module.require (node:internal/modules/cjs/loader:1231:19)
+      at require (node:internal/modules/helpers:177:18)
+      at Object.<anonymous> (/app/src/app.js:19:20),
+  level: 'error',
+  message: 'uncaughtException: Route.get() requires a callback function but got a [object Object]\n' +
+    'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  stack: 'Error: Route.get() requires a callback function but got a [object Object]\n' +
+    '    at Route.<computed> [as get] (/app/node_modules/express/lib/router/route.js:216:15)\n' +
+    '    at proto.<computed> [as get] (/app/node_modules/express/lib/router/index.js:521:19)\n' +
+    '    at Object.<anonymous> (/app/src/routes/auth.js:306:8)\n' +
+    '    at Module._compile (node:internal/modules/cjs/loader:1364:14)\n' +
+    '    at Module._extensions..js (node:internal/modules/cjs/loader:1422:10)\n' +
+    '    at Module.load (node:internal/modules/cjs/loader:1203:32)\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1019:12)\n' +
+    '    at Module.require (node:internal/modules/cjs/loader:1231:19)\n' +
+    '    at require (node:internal/modules/helpers:177:18)\n' +
+    '    at Object.<anonymous> (/app/src/app.js:19:20)',
+  exception: true,
+  date: 'Thu Jul 31 2025 00:15:33 GMT+0000 (Coordinated Universal Time)',
+  process: {
+    pid: 18,
+    uid: 1001,
+    gid: 1001,
+    cwd: '/app',
+    execPath: '/usr/local/bin/node',
+    version: 'v18.20.8',
+    argv: [ '/usr/local/bin/node', '/app/src/app.js' ],
+    memoryUsage: {
+      rss: 107966464,
+      heapTotal: 60878848,
+      heapUsed: 37529792,
+      external: 3076347,
+      arrayBuffers: 421384
+    }
+  },
+  os: { loadavg: [ 0.93, 0.49, 0.28 ], uptime: 12798.39 },
+  trace: [
+    {
+      column: 15,
+      file: '/app/node_modules/express/lib/router/route.js',
+      function: 'Route.<computed> [as get]',
+      line: 216,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 19,
+      file: '/app/node_modules/express/lib/router/index.js',
+      function: 'proto.<computed> [as get]',
+      line: 521,
+      method: '<computed> [as get]',
+      native: false
+    },
+    {
+      column: 8,
+      file: '/app/src/routes/auth.js',
+      function: null,
+      line: 306,
+      method: null,
+      native: false
+    },
+    {
+      column: 14,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._compile',
+      line: 1364,
+      method: '_compile',
+      native: false
+    },
+    {
+      column: 10,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._extensions..js',
+      line: 1422,
+      method: '.js',
+      native: false
+    },
+    {
+      column: 32,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.load',
+      line: 1203,
+      method: 'load',
+      native: false
+    },
+    {
+      column: 12,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module._load',
+      line: 1019,
+      method: '_load',
+      native: false
+    },
+    {
+      column: 19,
+      file: 'node:internal/modules/cjs/loader',
+      function: 'Module.require',
+      line: 1231,
+      method: 'require',
+      native: false
+    },
+    {
+      column: 18,
+      file: 'node:internal/modules/helpers',
+      function: 'require',
+      line: 177,
+      method: null,
+      native: false
+    },
+    {
+      column: 20,
+      file: '/app/src/app.js',
+      function: null,
+      line: 19,
+      method: null,
+      native: false
+    }
+  ],
+  service: 'sso-microservice',
+  version: '1.0.0',
+  environment: 'production',
+  timestamp: '2025-07-31 00:15:33'
+}
