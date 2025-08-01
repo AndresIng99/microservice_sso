@@ -123,7 +123,7 @@ model Microservice {
 model Session {
   id           String   @id @default(uuid())
   userId       Int
-  refreshToken String   @unique @db.VarChar(512)
+  refreshToken String   @unique @db.Text // CAMBIADO: de VarChar(512) a Text
   
   // Información de la sesión
   userAgent    String?  @db.Text

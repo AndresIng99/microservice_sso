@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+// auth-system/backend/src/utils/database.ts
+import { PrismaClient, PrismaClientOptions } from '@prisma/client';
 import { logger } from './logger';
 
 // Configuración del cliente Prisma
@@ -56,9 +57,9 @@ export async function disconnectDatabase(): Promise<void> {
   }
 }
 
-// Función helper para transacciones
+// Función helper para transacciones - versión corregida
 export async function executeTransaction<T>(
-  callback: (tx: PrismaClient) => Promise<T>
+  callback: (tx: Omit<PrismaClient, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends">) => Promise<T>
 ): Promise<T> {
   return await prisma.$transaction(callback, {
     maxWait: 5000, // Tiempo máximo de espera: 5 segundos

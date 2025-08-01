@@ -1,3 +1,4 @@
+// auth-system/backend/src/utils/jwt.ts
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'change-this-super-secret-key-in-production';
@@ -12,11 +13,13 @@ export interface TokenPayload {
     permissions: string[];
   };
   type: 'access' | 'refresh';
+  iat?: number;
+  exp?: number;
 }
 
 // Generar access token
 export function generateAccessToken(user: any): string {
-  const payload: TokenPayload = {
+  const payload: Omit<TokenPayload, 'iat' | 'exp'> = {
     user: {
       id: user.id,
       username: user.username,
@@ -33,7 +36,7 @@ export function generateAccessToken(user: any): string {
 
 // Generar refresh token
 export function generateRefreshToken(user: any): string {
-  const payload: TokenPayload = {
+  const payload: Omit<TokenPayload, 'iat' | 'exp'> = {
     user: {
       id: user.id,
       username: user.username,

@@ -1,3 +1,4 @@
+# Frontend Dockerfile
 FROM node:18-alpine
 
 # Crear directorio de trabajo
@@ -6,8 +7,8 @@ WORKDIR /app
 # Copiar archivos de dependencias
 COPY package*.json ./
 
-# Instalar dependencias
-RUN npm ci
+# Instalar dependencias (usar install en lugar de ci)
+RUN npm install
 
 # Copiar código fuente
 COPY . .

@@ -16,12 +16,7 @@
     "rootDir": "./src",
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"],
-      "@/types/*": ["./types/*"],
-      "@/utils/*": ["./utils/*"],
-      "@/services/*": ["./services/*"],
-      "@/routes/*": ["./routes/*"],
-      "@/middleware/*": ["./middleware/*"]
+      "@/*": ["./*"]
     },
     "declaration": true,
     "sourceMap": true,
@@ -30,12 +25,12 @@
     "types": ["node"]
   },
   "include": [
-    "src/**/*",
-    "prisma/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",
     "dist",
+    "prisma",
     "**/*.test.ts",
     "**/*.spec.ts"
   ],

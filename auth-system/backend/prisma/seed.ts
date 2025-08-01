@@ -1,3 +1,4 @@
+// auth-system/backend/prisma/seed.ts
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
@@ -5,18 +6,6 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log('🌱 Iniciando seed de la base de datos...');
-
-  // Limpiar datos existentes (solo en desarrollo)
-  if (process.env.NODE_ENV === 'development') {
-    console.log('🧹 Limpiando datos existentes...');
-    await prisma.auditLog.deleteMany();
-    await prisma.session.deleteMany();
-    await prisma.userRole.deleteMany();
-    await prisma.user.deleteMany();
-    await prisma.role.deleteMany();
-    await prisma.microservice.deleteMany();
-    await prisma.systemConfig.deleteMany();
-  }
 
   // Crear roles del sistema
   console.log('👥 Creando roles del sistema...');
@@ -186,56 +175,6 @@ async function main() {
       where: { name: service.name },
       update: {},
       create: service
-    });
-  }
-
-  // Configuraciones del sistema
-  console.log('⚙️ Creando configuraciones del sistema...');
-  
-  const systemConfigs = [
-    {
-      key: 'system.name',
-      value: 'Sistema de Autenticación Centralizado',
-      description: 'Nombre del sistema',
-      dataType: 'string'
-    },
-    {
-      key: 'auth.max_login_attempts',
-      value: '5',
-      description: 'Máximo número de intentos de login fallidos',
-      dataType: 'number'
-    },
-    {
-      key: 'auth.lockout_duration',
-      value: '15',
-      description: 'Duración del bloqueo en minutos',
-      dataType: 'number'
-    },
-    {
-      key: 'jwt.access_token_expires',
-      value: '15m',
-      description: 'Tiempo de expiración del access token',
-      dataType: 'string'
-    },
-    {
-      key: 'jwt.refresh_token_expires',
-      value: '7d',
-      description: 'Tiempo de expiración del refresh token',
-      dataType: 'string'
-    },
-    {
-      key: 'system.maintenance_mode',
-      value: 'false',
-      description: 'Modo de mantenimiento del sistema',
-      dataType: 'boolean'
-    }
-  ];
-
-  for (const config of systemConfigs) {
-    await prisma.systemConfig.upsert({
-      where: { key: config.key },
-      update: {},
-      create: config
     });
   }
 

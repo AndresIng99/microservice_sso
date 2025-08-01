@@ -1,3 +1,4 @@
+// auth-system/backend/src/app.ts
 import Fastify, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import jwt from '@fastify/jwt';
@@ -66,31 +67,7 @@ export async function createApp(): Promise<FastifyInstance> {
   // Registrar middleware de autenticación
   app.decorate('authenticate', authenticateToken);
 
-  // Registrar rutas
-  await app.register(authRoutes, { prefix: '/api/auth' });
-  await app.register(userRoutes, { prefix: '/api/users' });
-  await app.register(roleRoutes, { prefix: '/api/roles' });
-  await app.register(microserviceRoutes, { prefix: '/api/microservices' });
-  await app.register(dashboardRoutes, { prefix: '/api/dashboard' });
-
-  // Ruta de información de la API
-  app.get('/api', async (request, reply) => {
-    return {
-      name: 'Sistema de Autenticación Centralizado',
-      version: '1.0.0',
-      description: 'API para autenticación centralizada de microservicios',
-      endpoints: {
-        auth: '/api/auth',
-        users: '/api/users',
-        roles: '/api/roles',
-        microservices: '/api/microservices',
-        dashboard: '/api/dashboard',
-        health: '/health'
-      }
-    };
-  });
-
-  // Endpoint especial para validación de tokens (usado por nginx)
+  // Endpoint especial para validación de tokens (usado por nginx) - ANTES de las rutas
   app.get('/api/auth/validate', async (request, reply) => {
     try {
       const token = request.headers.authorization?.replace('Bearer ', '');
@@ -122,6 +99,30 @@ export async function createApp(): Promise<FastifyInstance> {
       reply.code(401);
       return { error: 'Token inválido o expirado' };
     }
+  });
+
+  // Registrar rutas
+  await app.register(authRoutes, { prefix: '/api/auth' });
+  await app.register(userRoutes, { prefix: '/api/users' });
+  await app.register(roleRoutes, { prefix: '/api/roles' });
+  await app.register(microserviceRoutes, { prefix: '/api/microservices' });
+  await app.register(dashboardRoutes, { prefix: '/api/dashboard' });
+
+  // Ruta de información de la API
+  app.get('/api', async (request, reply) => {
+    return {
+      name: 'Sistema de Autenticación Centralizado',
+      version: '1.0.0',
+      description: 'API para autenticación centralizada de microservicios',
+      endpoints: {
+        auth: '/api/auth',
+        users: '/api/users',
+        roles: '/api/roles',
+        microservices: '/api/microservices',
+        dashboard: '/api/dashboard',
+        health: '/health'
+      }
+    };
   });
 
   // Manejo de errores global

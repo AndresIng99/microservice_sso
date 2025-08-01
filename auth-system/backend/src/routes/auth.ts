@@ -1,3 +1,4 @@
+// auth-system/backend/src/routes/auth.ts
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { AuthService } from '../services/auth.service';
@@ -137,41 +138,6 @@ export default async function authRoutes(fastify: FastifyInstance) {
       reply.code(500);
       return {
         error: error.message || 'Error al cerrar sesiones'
-      };
-    }
-  });
-
-  // GET /api/auth/validate
-  fastify.get('/validate', {
-    preHandler: [fastify.authenticate]
-  }, async (request, reply) => {
-    try {
-      if (!request.user) {
-        reply.code(401);
-        return { error: 'Token inválido' };
-      }
-
-      // Headers para nginx (si se usa como middleware)
-      reply.header('X-User-ID', request.user.id.toString());
-      reply.header('X-User-Username', request.user.username);
-      reply.header('X-User-Email', request.user.email);
-      reply.header('X-User-Permissions', JSON.stringify(request.user.permissions));
-      
-      reply.code(200);
-      return {
-        valid: true,
-        user: {
-          id: request.user.id,
-          username: request.user.username,
-          email: request.user.email,
-          permissions: request.user.permissions
-        }
-      };
-      
-    } catch (error: any) {
-      reply.code(401);
-      return {
-        error: 'Token inválido o expirado'
       };
     }
   });
