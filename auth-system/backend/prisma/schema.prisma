@@ -1,0 +1,199 @@
+// Schema de Base de Datos - Sistema de Autenticación Centralizado
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===== USUARIOS =====
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(50)
+  email     String   @unique @db.VarChar(100)
+  password  String   @db.VarChar(255) // Hash con bcrypt
+  
+  // Información personal
+  firstName String   @db.VarChar(100)
+  lastName  String   @db.VarChar(100)
+  cedula    String?  @unique @db.VarChar(20)
+  telefono  String?  @db.VarChar(20)
+  
+  // Estados y control
+  isActive  Boolean  @default(true)
+  isDeleted Boolean  @default(false)
+  
+  // Auditoria
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastLogin DateTime?
+  
+  // Seguridad
+  loginAttempts Int      @default(0)
+  lockedUntil   DateTime?
+  
+  // Relaciones
+  userRoles UserRole[]
+  sessions  Session[]
+  
+  @@map("users")
+  @@index([username])
+  @@index([email])
+  @@index([isActive, isDeleted])
+}
+
+// ===== ROLES =====
+model Role {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique @db.VarChar(50)
+  description String? @db.Text
+  
+  // Permisos como JSON array: ["users.create", "users.edit", "roles.view"]
+  permissions Json    @default("[]")
+  
+  // Estados
+  isActive Boolean @default(true)
+  
+  // Auditoria
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relaciones
+  userRoles UserRole[]
+  
+  @@map("roles")
+  @@index([name])
+  @@index([isActive])
+}
+
+// ===== RELACIÓN USUARIOS-ROLES (Many-to-Many) =====
+model UserRole {
+  id     Int @id @default(autoincrement())
+  userId Int
+  roleId Int
+  
+  // Auditoria
+  assignedAt DateTime @default(now())
+  assignedBy Int?     // ID del usuario que asignó el rol
+  
+  // Relaciones
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, roleId])
+  @@map("user_roles")
+  @@index([userId])
+  @@index([roleId])
+}
+
+// ===== MICROSERVICIOS REGISTRADOS =====
+model Microservice {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique @db.VarChar(100)
+  description String? @db.Text
+  url         String  @db.VarChar(255)
+  version     String  @default("1.0.0") @db.VarChar(20)
+  
+  // Estados
+  isActive Boolean @default(true)
+  
+  // Health check
+  isHealthy        Boolean   @default(false)
+  lastHealthCheck  DateTime?
+  healthCheckUrl   String?   @db.VarChar(255)
+  expectedResponse String?   @db.Text
+  
+  // Configuración de autenticación
+  requiresAuth Boolean @default(true)
+  allowedRoles Json    @default("[]") // Array de roles permitidos
+  
+  // Auditoria
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("microservices")
+  @@index([name])
+  @@index([isActive])
+  @@index([isHealthy])
+}
+
+// ===== SESIONES JWT =====
+model Session {
+  id           String   @id @default(uuid())
+  userId       Int
+  refreshToken String   @unique @db.VarChar(512)
+  
+  // Información de la sesión
+  userAgent    String?  @db.Text
+  ipAddress    String?  @db.VarChar(45) // IPv6 compatible
+  deviceInfo   String?  @db.Text
+  
+  // Control de expiración
+  expiresAt DateTime
+  
+  // Estados
+  isActive  Boolean @default(true)
+  isRevoked Boolean @default(false)
+  
+  // Auditoria
+  createdAt DateTime @default(now())
+  lastUsed  DateTime @default(now())
+  
+  // Relaciones
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("sessions")
+  @@index([userId])
+  @@index([refreshToken])
+  @@index([expiresAt])
+  @@index([isActive, isRevoked])
+}
+
+// ===== LOGS DE AUDITORÍA =====
+model AuditLog {
+  id       Int    @id @default(autoincrement())
+  userId   Int?   // Usuario que realizó la acción
+  action   String @db.VarChar(100) // "login", "create_user", "update_role", etc.
+  resource String @db.VarChar(100) // "user", "role", "microservice", etc.
+  
+  // Detalles de la acción
+  resourceId String? @db.VarChar(50) // ID del recurso afectado
+  oldValues  Json?   // Valores anteriores (para updates)
+  newValues  Json?   // Valores nuevos
+  
+  // Información de contexto
+  ipAddress String? @db.VarChar(45)
+  userAgent String? @db.Text
+  
+  // Timestamp
+  createdAt DateTime @default(now())
+  
+  @@map("audit_logs")
+  @@index([userId])
+  @@index([action])
+  @@index([resource])
+  @@index([createdAt])
+}
+
+// ===== CONFIGURACIÓN DEL SISTEMA =====
+model SystemConfig {
+  id    Int    @id @default(autoincrement())
+  key   String @unique @db.VarChar(100)
+  value String @db.Text
+  
+  // Metadata
+  description String? @db.Text
+  dataType    String  @default("string") @db.VarChar(20) // "string", "number", "boolean", "json"
+  
+  // Control
+  isEditable Boolean @default(true)
+  
+  // Auditoria
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("system_config")
+  @@index([key])
+}
