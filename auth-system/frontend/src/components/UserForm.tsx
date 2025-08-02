@@ -1,3 +1,5 @@
+// REEMPLAZA COMPLETAMENTE: auth-system/frontend/src/components/UserForm.tsx
+
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,7 +12,11 @@ import { rolesApi } from '../services/roles'
 const createUserSchema = z.object({
   username: z.string().min(3, 'Username debe tener al menos 3 caracteres'),
   email: z.string().email('Email inválido'),
-  password: z.string().min(8, 'Password debe tener al menos 8 caracteres'),
+  password: z.string()
+    .min(8, 'Password debe tener al menos 8 caracteres')
+    .regex(/[A-Z]/, 'Password debe tener al menos una letra mayúscula')
+    .regex(/[a-z]/, 'Password debe tener al menos una letra minúscula')
+    .regex(/\d/, 'Password debe tener al menos un número'),
   firstName: z.string().min(1, 'Nombre es requerido'),
   lastName: z.string().min(1, 'Apellido es requerido'),
   cedula: z.string().optional(),
@@ -19,7 +25,13 @@ const createUserSchema = z.object({
 })
 
 const updateUserSchema = createUserSchema.omit({ password: true }).extend({
-  password: z.string().optional(),
+  password: z.string()
+    .min(8, 'Password debe tener al menos 8 caracteres')
+    .regex(/[A-Z]/, 'Password debe tener al menos una letra mayúscula')
+    .regex(/[a-z]/, 'Password debe tener al menos una letra minúscula')
+    .regex(/\d/, 'Password debe tener al menos un número')
+    .optional()
+    .or(z.literal('')),
 })
 
 type FormData = z.infer<typeof createUserSchema>
@@ -32,6 +44,7 @@ interface UserFormProps {
 
 const UserForm = ({ user, onClose, onSuccess }: UserFormProps) => {
   const [showPassword, setShowPassword] = useState(false)
+  const [passwordValue, setPasswordValue] = useState('')
   const isEditing = !!user
 
   // Query para obtener roles disponibles
@@ -61,6 +74,17 @@ const UserForm = ({ user, onClose, onSuccess }: UserFormProps) => {
 
   const selectedRoleIds = watch('roleIds')
 
+  // Función para validar si la contraseña cumple todos los requisitos
+  const isPasswordValid = (password: string) => {
+    if (!password && isEditing) return true; // En edición, contraseña vacía es válida
+    if (!password && !isEditing) return false; // En creación, contraseña es requerida
+    
+    return password.length >= 8 &&
+           /[A-Z]/.test(password) &&
+           /[a-z]/.test(password) &&
+           /\d/.test(password);
+  }
+
   // Mutación para crear/actualizar usuario
   const mutation = useMutation({
     mutationFn: async (data: FormData) => {
@@ -74,7 +98,7 @@ const UserForm = ({ user, onClose, onSuccess }: UserFormProps) => {
           telefono: data.telefono,
           roleIds: data.roleIds,
         }
-        if (data.password) {
+        if (data.password && data.password.trim() !== '') {
           updateData.password = data.password
         }
         return usersApi.updateUser(user.id, updateData)
@@ -221,6 +245,10 @@ const UserForm = ({ user, onClose, onSuccess }: UserFormProps) => {
                 {...register('password')}
                 type={showPassword ? 'text' : 'password'}
                 className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 pr-10 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                onChange={(e) => {
+                  register('password').onChange(e);
+                  setPasswordValue(e.target.value);
+                }}
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                 <button
@@ -236,6 +264,40 @@ const UserForm = ({ user, onClose, onSuccess }: UserFormProps) => {
                 </button>
               </div>
             </div>
+            
+            {/* Validaciones de contraseña en tiempo real */}
+            {(passwordValue || errors.password) && (
+              <div className="mt-2 space-y-1">
+                <p className="text-xs font-medium text-gray-700">Requisitos de contraseña:</p>
+                <div className="space-y-1">
+                  <div className={`flex items-center space-x-2 text-xs ${
+                    passwordValue && passwordValue.length >= 8 ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    <span>{passwordValue && passwordValue.length >= 8 ? '✓' : '✗'}</span>
+                    <span>Mínimo 8 caracteres</span>
+                  </div>
+                  <div className={`flex items-center space-x-2 text-xs ${
+                    passwordValue && /[A-Z]/.test(passwordValue) ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    <span>{passwordValue && /[A-Z]/.test(passwordValue) ? '✓' : '✗'}</span>
+                    <span>Al menos una letra mayúscula</span>
+                  </div>
+                  <div className={`flex items-center space-x-2 text-xs ${
+                    passwordValue && /[a-z]/.test(passwordValue) ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    <span>{passwordValue && /[a-z]/.test(passwordValue) ? '✓' : '✗'}</span>
+                    <span>Al menos una letra minúscula</span>
+                  </div>
+                  <div className={`flex items-center space-x-2 text-xs ${
+                    passwordValue && /\d/.test(passwordValue) ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    <span>{passwordValue && /\d/.test(passwordValue) ? '✓' : '✗'}</span>
+                    <span>Al menos un número</span>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             {errors.password && (
               <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
             )}
@@ -286,7 +348,10 @@ const UserForm = ({ user, onClose, onSuccess }: UserFormProps) => {
             </button>
             <button
               type="submit"
-              disabled={mutation.isPending}
+              disabled={
+                mutation.isPending || 
+                (!isEditing && !isPasswordValid(passwordValue))
+              }
               className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {mutation.isPending

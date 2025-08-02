@@ -1,3 +1,6 @@
+// REEMPLAZA COMPLETAMENTE: auth-system/backend/src/services/users.service.ts
+// VERSIÓN FUNCIONAL COMPLETA
+
 import { prisma } from '../utils/database';
 import { hashPassword, verifyPassword, validatePasswordPolicy } from '../utils/password';
 import { logger } from '../utils/logger';
@@ -167,7 +170,7 @@ export class UsersService {
     }
   }
 
-  // Crear nuevo usuario
+  // Crear nuevo usuario - VERSIÓN CON DEBUGGING
   async createUser(userData: {
     username: string;
     email: string;
@@ -178,14 +181,30 @@ export class UsersService {
     telefono?: string;
     roleIds?: number[];
   }, createdBy: number) {
+    
+    console.log('=== INICIO CREACIÓN USUARIO ===');
+    console.log('Datos:', {
+      username: userData.username,
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      hasRoleIds: !!userData.roleIds,
+      roleIdsCount: userData.roleIds?.length || 0,
+      roleIds: userData.roleIds
+    });
+    
     try {
       // Validar política de contraseñas
+      console.log('Validando política de contraseñas...');
       const passwordValidation = validatePasswordPolicy(userData.password);
       if (!passwordValidation.isValid) {
-        throw new Error(`Contraseña no cumple los requisitos: ${passwordValidation.errors.join(', ')}`);
+        const errorMsg = `Contraseña no cumple los requisitos: ${passwordValidation.errors.join(', ')}`;
+        console.log('Error de contraseña:', errorMsg);
+        throw new Error(errorMsg);
       }
 
       // Verificar que username y email no existan
+      console.log('Verificando duplicados...');
       const existingUser = await prisma.user.findFirst({
         where: {
           OR: [
@@ -197,6 +216,7 @@ export class UsersService {
       });
 
       if (existingUser) {
+        console.log('Usuario duplicado encontrado:', existingUser.username);
         if (existingUser.username === userData.username) {
           throw new Error('Ya existe un usuario con ese username');
         }
@@ -207,6 +227,7 @@ export class UsersService {
 
       // Verificar cédula si se proporciona
       if (userData.cedula) {
+        console.log('Verificando cédula...');
         const existingCedula = await prisma.user.findFirst({
           where: {
             cedula: userData.cedula,
@@ -215,16 +236,44 @@ export class UsersService {
         });
 
         if (existingCedula) {
+          console.log('Cédula duplicada encontrada');
           throw new Error('Ya existe un usuario con esa cédula');
         }
       }
 
       // Hash de la contraseña
+      console.log('Hasheando contraseña...');
       const hashedPassword = await hashPassword(userData.password);
 
+      // Validar roles si se proporcionan
+      let validRoleIds: number[] = [];
+      if (userData.roleIds && userData.roleIds.length > 0) {
+        console.log('Validando roles:', userData.roleIds);
+        
+        const existingRoles = await prisma.role.findMany({
+          where: {
+            id: { in: userData.roleIds },
+            isActive: true
+          }
+        });
+
+        console.log('Roles encontrados:', existingRoles.map(r => ({ id: r.id, name: r.name })));
+
+        if (existingRoles.length !== userData.roleIds.length) {
+          const foundIds = existingRoles.map(r => r.id);
+          const missingIds = userData.roleIds.filter(id => !foundIds.includes(id));
+          console.log('Roles faltantes:', missingIds);
+          throw new Error(`Los siguientes roles no existen o están inactivos: ${missingIds.join(', ')}`);
+        }
+        
+        validRoleIds = userData.roleIds;
+      }
+
       // Crear usuario en transacción
+      console.log('Iniciando transacción...');
       const result = await prisma.$transaction(async (tx) => {
         // Crear usuario
+        console.log('Creando usuario...');
         const newUser = await tx.user.create({
           data: {
             username: userData.username,
@@ -232,35 +281,66 @@ export class UsersService {
             password: hashedPassword,
             firstName: userData.firstName,
             lastName: userData.lastName,
-            cedula: userData.cedula,
-            telefono: userData.telefono
+            cedula: userData.cedula || null,
+            telefono: userData.telefono || null
           }
         });
 
+        console.log('Usuario creado con ID:', newUser.id);
+
         // Asignar roles si se especifican
-        if (userData.roleIds && userData.roleIds.length > 0) {
+        if (validRoleIds.length > 0) {
+          console.log('Asignando roles...');
+          
+          const userRolesToCreate = validRoleIds.map(roleId => ({
+            userId: newUser.id,
+            roleId,
+            assignedBy: createdBy
+          }));
+
+          console.log('UserRoles a crear:', userRolesToCreate);
+
           await tx.userRole.createMany({
-            data: userData.roleIds.map(roleId => ({
-              userId: newUser.id,
-              roleId,
-              assignedBy: createdBy
-            }))
+            data: userRolesToCreate
           });
+
+          console.log('Roles asignados exitosamente');
         }
 
         return newUser;
       });
 
-      logger.info(`Usuario creado: ${userData.username}`, { 
-        userId: result.id, 
-        createdBy 
-      });
+      console.log('Transacción completada. Obteniendo usuario completo...');
 
       // Obtener usuario completo con roles
-      return await this.getUserById(result.id);
+      const userWithRoles = await this.getUserById(result.id);
+      
+      console.log('=== USUARIO CREADO EXITOSAMENTE ===');
+      console.log('Usuario final:', {
+        id: userWithRoles?.id,
+        username: userWithRoles?.username,
+        rolesCount: userWithRoles?.roles?.length || 0
+      });
+
+      return userWithRoles;
 
     } catch (error: any) {
-      logger.error('Error al crear usuario:', error);
+      console.log('=== ERROR EN CREACIÓN ===');
+      console.log('Error type:', typeof error);
+      console.log('Error name:', error.name);
+      console.log('Error message:', error.message);
+      console.log('Error stack:', error.stack);
+      
+      logger.error('Error detallado al crear usuario:', {
+        message: error.message,
+        stack: error.stack,
+        userData: {
+          username: userData.username,
+          email: userData.email,
+          roleIds: userData.roleIds
+        }
+      });
+      
       throw error;
     }
   }

@@ -1,9 +1,11 @@
+// REEMPLAZA COMPLETAMENTE: auth-system/frontend/src/pages/Login.tsx
+
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useAuthStore } from '../services/auth'
-import { Lock, User, Eye, EyeOff } from 'lucide-react'
+import { Lock, User, Eye, EyeOff, Shield } from 'lucide-react'
 
 const loginSchema = z.object({
   username: z.string().min(1, 'Usuario es requerido'),
@@ -41,14 +43,14 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
-        <div>
-          <div className="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-primary-600">
-            <Lock className="h-8 w-8 text-white" />
+        <div className="text-center">
+          <div className="mx-auto h-20 w-20 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-700 shadow-lg">
+            <Shield className="h-10 w-10 text-white" />
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
             Iniciar Sesión
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
@@ -56,13 +58,13 @@ const Login = () => {
           </p>
         </div>
 
-        {/* Formulario */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-4">
-            {/* Usuario */}
+        {/* Card del formulario */}
+        <div className="bg-white rounded-xl shadow-xl border border-gray-100 p-8">
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            {/* Campo Usuario */}
             <div>
-              <label htmlFor="username" className="sr-only">
-                Usuario
+              <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-2">
+                Usuario o Email
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -71,18 +73,21 @@ const Login = () => {
                 <input
                   {...register('username')}
                   type="text"
-                  className="appearance-none rounded-lg relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-                  placeholder="Usuario o email"
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                  placeholder="Ingresa tu usuario o email"
                 />
               </div>
               {errors.username && (
-                <p className="mt-1 text-sm text-red-600">{errors.username.message}</p>
+                <p className="mt-2 text-sm text-red-600 flex items-center">
+                  <span className="mr-1">⚠️</span>
+                  {errors.username.message}
+                </p>
               )}
             </div>
 
-            {/* Contraseña */}
+            {/* Campo Contraseña */}
             <div>
-              <label htmlFor="password" className="sr-only">
+              <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
                 Contraseña
               </label>
               <div className="relative">
@@ -92,13 +97,13 @@ const Login = () => {
                 <input
                   {...register('password')}
                   type={showPassword ? 'text' : 'password'}
-                  className="appearance-none rounded-lg relative block w-full pl-10 pr-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-                  placeholder="Contraseña"
+                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                  placeholder="Ingresa tu contraseña"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                   <button
                     type="button"
-                    className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                    className="text-gray-400 hover:text-gray-600 focus:outline-none focus:text-gray-600 transition-colors duration-200"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
@@ -110,38 +115,84 @@ const Login = () => {
                 </div>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                <p className="mt-2 text-sm text-red-600 flex items-center">
+                  <span className="mr-1">⚠️</span>
+                  {errors.password.message}
+                </p>
               )}
             </div>
-          </div>
 
-          {/* Error message */}
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="text-sm text-red-700">{error}</div>
+            {/* Error message */}
+            {error && (
+              <div className="rounded-lg bg-red-50 border border-red-200 p-4">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <span className="text-red-400 text-lg">❌</span>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-red-800">{error}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Submit button */}
+            <div>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+              >
+                {isLoading ? (
+                  <div className="flex items-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Iniciando sesión...
+                  </div>
+                ) : (
+                  <div className="flex items-center">
+                    <Lock className="h-4 w-4 mr-2" />
+                    Iniciar Sesión
+                  </div>
+                )}
+              </button>
             </div>
-          )}
-
-          {/* Submit button */}
-          <div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-            </button>
-          </div>
+          </form>
 
           {/* Credenciales por defecto */}
-          <div className="text-center">
-            <div className="text-xs text-gray-500 bg-gray-100 rounded-lg p-3 mt-4">
-              <p className="font-medium mb-1">Credenciales por defecto:</p>
-              <p>Usuario: <span className="font-mono">admin</span></p>
-              <p>Contraseña: <span className="font-mono">admin123</span></p>
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">Credenciales de prueba</span>
+              </div>
+            </div>
+            
+            <div className="mt-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-100">
+              <div className="text-center">
+                <p className="text-sm font-semibold text-blue-900 mb-2">Datos para acceder:</p>
+                <div className="space-y-1">
+                  <div className="flex items-center justify-center space-x-2">
+                    <span className="text-xs text-blue-700 font-medium">Usuario:</span>
+                    <code className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-mono">admin</code>
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <span className="text-xs text-blue-700 font-medium">Contraseña:</span>
+                    <code className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-mono">admin123</code>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </form>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center">
+          <p className="text-xs text-gray-500">
+            Sistema de Autenticación Centralizado v1.0.0
+          </p>
+        </div>
       </div>
     </div>
   )
