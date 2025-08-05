@@ -91,6 +91,9 @@ services:
       - auth_network
     restart: unless-stopped
 
+
+
+
 networks:
   auth_network:
     driver: bridge

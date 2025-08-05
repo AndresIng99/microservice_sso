@@ -51,8 +51,8 @@ const microserviceSchema = z.object({
   name: z.string().min(1, 'Nombre es requerido'),
   description: z.string().optional(),
   url: z.string().url('URL inválida'),
-  version: z.string().optional(),
-  healthCheckUrl: z.string().url('URL de health check inválida').optional().or(z.literal('')),
+  version: z.string().optional().default('1.0.0'),
+  healthCheckUrl: z.string().optional().or(z.literal('')),
   expectedResponse: z.string().optional(),
   requiresAuth: z.boolean().default(true),
   allowedRoles: z.array(z.string()).default([]),
@@ -520,13 +520,16 @@ const Microservices = () => {
   )
 }
 
-// Componente del formulario de microservicios
+// Componente del formulario de microservicios - VERSIÓN CORREGIDA
 const MicroserviceForm = ({ service, onClose, onSuccess }: {
   service?: Microservice | null
   onClose: () => void
   onSuccess: () => void
 }) => {
   const isEditing = !!service
+  const [allowedRolesString, setAllowedRolesString] = useState(
+    service?.allowedRoles?.join(', ') || ''
+  )
 
   const {
     register,
@@ -564,6 +567,8 @@ const MicroserviceForm = ({ service, onClose, onSuccess }: {
 
   const mutation = useMutation({
     mutationFn: async (data: MicroserviceFormData) => {
+      console.log('Datos a enviar:', data)
+      
       const payload = {
         ...data,
         healthCheckUrl: data.healthCheckUrl || undefined,
@@ -579,10 +584,20 @@ const MicroserviceForm = ({ service, onClose, onSuccess }: {
     onSuccess: () => {
       onSuccess()
     },
+    onError: (error) => {
+      console.error('Error en mutación:', error)
+    }
   })
 
   const onSubmit = (data: MicroserviceFormData) => {
+    console.log('Formulario enviado:', data)
     mutation.mutate(data)
+  }
+
+  const handleAllowedRolesChange = (value: string) => {
+    setAllowedRolesString(value)
+    const roles = value.split(',').map(r => r.trim()).filter(Boolean)
+    setValue('allowedRoles', roles, { shouldValidate: true })
   }
 
   return (
@@ -666,7 +681,7 @@ const MicroserviceForm = ({ service, onClose, onSuccess }: {
             </label>
             <input
               {...register('healthCheckUrl')}
-              type="url"
+              type="text"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
               placeholder="http://localhost:8000/health (opcional)"
             />
@@ -709,18 +724,28 @@ const MicroserviceForm = ({ service, onClose, onSuccess }: {
                   Roles permitidos (separados por comas)
                 </label>
                 <input
-                  {...register('allowedRoles')}
                   type="text"
+                  value={allowedRolesString}
+                  onChange={(e) => handleAllowedRolesChange(e.target.value)}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
                   placeholder="admin,user,editor"
-                  onChange={(e) => {
-                    const roles = e.target.value.split(',').map(r => r.trim()).filter(Boolean)
-                    setValue('allowedRoles', roles)
-                  }}
                 />
+                <p className="mt-1 text-sm text-gray-500">
+                  Ejemplo: admin, user, editor
+                </p>
               </div>
             )}
           </div>
+
+          {/* Debug info - remover en producción */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="bg-gray-50 p-3 rounded text-xs">
+              <p><strong>Debug:</strong></p>
+              <p>Errors: {JSON.stringify(errors)}</p>
+              <p>Mutation pending: {mutation.isPending.toString()}</p>
+              <p>Form valid: {Object.keys(errors).length === 0 ? 'true' : 'false'}</p>
+            </div>
+          )}
 
           {/* Error message */}
           {mutation.error && (
