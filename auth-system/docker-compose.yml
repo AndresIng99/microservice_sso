@@ -92,13 +92,9 @@ services:
     restart: unless-stopped
 
 
-
-
 networks:
   auth_network:
     driver: bridge
-
-
 
 
 volumes:
